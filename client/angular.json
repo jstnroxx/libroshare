@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "libroshare-client": {
+    "client": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -56,10 +56,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "libroshare-client:build:production"
+              "buildTarget": "client:build:production"
             },
             "development": {
-              "buildTarget": "libroshare-client:build:development"
+              "buildTarget": "client:build:development"
             }
           },
           "defaultConfiguration": "development"
