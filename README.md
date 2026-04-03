@@ -5,9 +5,9 @@
 The platform focuses on peer-to-peer book exchange, encouraging reading culture while reducing unnecessary purchases.
 
 ## Built With
-* **Frontend:** ![Angular](https://img.shields.io/badge/Angular-red?logo=angular)
-* **Backend:** ![Django](https://img.shields.io/badge/Django-brightgreen?logo=django) ![SQLite](https://img.shields.io/badge/SQLite-blue?logo=sqlite)
-* **Tools:** ![NodeJS](https://img.shields.io/badge/Node.js-green?logo=node.js) ![npm](https://img.shields.io/badge/npm-red?logo=npm)
+* **Frontend:** ![Angular](https://img.shields.io/badge//-Angular-red?logo=angular)
+* **Backend:** ![Django](https://img.shields.io/badge//-Django-brightgreen?logo=django) ![SQLite](https://img.shields.io/badge//-SQLite-blue?logo=sqlite)
+* **Tools:** ![NodeJS](https://img.shields.io/badge//-Node.js-green?logo=node.js) ![npm](https://img.shields.io/badge//-npm-red?logo=npm)
 
 ## Team Members
 
