@@ -1,0 +1,105 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 4rem;
+  background-color: #F9F7F2; 
+  border-bottom: 1px solid #D1CEC7; 
+  font-family: 'Inter', sans-serif;
+}
+
+.logo {
+  font-family: 'Pinyon Script', cursive;
+  font-size: 2.4rem;
+  font-weight: 400;
+  color: #2C2C2C; 
+  letter-spacing: -0.5px;
+  text-decoration: none;
+  cursor: pointer;
+  margin: 0 20px;
+  line-height: 1;
+  transform: rotate(-1deg);
+  transition: all 0.4s ease;
+  user-select: none;
+  position: relative;
+}
+
+.logo:hover {
+  color: #A63D40;
+  transform: rotate(0deg) scale(1.02); 
+}
+
+.logo::after {
+  content: none !important;
+  display: none !important;
+}
+
+.nav-links a, .profile-link {
+  text-decoration: none;
+  color: #5A5A5A;
+  margin: 0 20px;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.4s ease;
+  position: relative;
+}
+
+.nav-links a:hover, .nav-links a.active, .profile-link:hover, .profile-link.active {
+  color: #2C2C2C;
+}
+
+.nav-links a::after, .profile-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 1px;
+  bottom: -5px;
+  left: 0;
+  background-color: #2C2C2C;
+  transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after, 
+.nav-links a.active::after, 
+.profile-link:hover::after,  
+.profile-link.active::after {
+  width: 100%;
+}
+
+.add-btn {
+  border: 1px solid #2C2C2C !important;
+  background: transparent;
+  color: #2C2C2C !important;
+  padding: 6px 20px !important;
+  border-radius: 0; 
+}
+
+.add-btn:hover {
+  background: #2C2C2C;
+  color: #F9F7F2 !important;
+}
+
+.add-btn::after {
+  content: none !important;
+  display: none !important;
+}
+
+.logout-btn {
+  border: 1px solid #A63D40 !important;
+  background: transparent;
+  padding: 6px 20px !important;
+  border-radius: 0;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  margin: 0 20px;
+  transition: all 0.3s ease;
+  color: #A63D40;
+}
+
+.logout-btn:hover {
+  background: #A63D40;
+  color: #F9F7F2 !important; 
+}
