@@ -1,0 +1,20 @@
+<nav class="navbar">
+  <a routerLink="/" 
+     class="logo" 
+     routerLinkActive="active" 
+     [routerLinkActiveOptions]="{exact: true}">
+    LibroShare
+  </a>
+
+  <div class="nav-links">
+    <a routerLink="/books" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Books</a>
+    <a routerLink="/my-books" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">My Shelf</a>
+    <a routerLink="/requests" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Requests</a>
+    <a routerLink="/add-book" class="add-btn">Add Book</a>
+  </div>
+
+  <div class="user-actions">
+    <a routerLink="/profile" class="profile-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Profile</a>
+    <button class="logout-btn">Logout</button>
+  </div>
+</nav>
