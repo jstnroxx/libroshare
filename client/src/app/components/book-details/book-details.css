@@ -1,0 +1,534 @@
+.detail-container {
+  min-height: 100vh;
+  padding: 4rem 10%;
+  background-color: #F9F7F2;
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+}
+
+.book-detail-wrapper {
+  display: flex;
+  gap: 5rem;
+  max-width: 1100px;
+  width: 100%;
+  align-items: flex-start;
+  margin-bottom: 6rem; 
+}
+
+.cover-section { flex: 1; top: 100px; }
+.main-cover {
+  width: 100%; aspect-ratio: 2/3; object-fit: cover;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15); border-radius: 2px;
+}
+
+.content-section { flex: 1.2; display: flex; flex-direction: column; }
+.meta-header { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.5rem; }
+
+.genre-badge {
+  font-family: 'Inter', sans-serif; font-size: 0.75rem;
+  text-transform: uppercase; letter-spacing: 2px;
+  padding: 4px 12px; border: 1px solid #2C2C2C; color: #2C2C2C;
+}
+.year-label { font-family: 'Inter', sans-serif; font-size: 0.9rem; color: #888; }
+
+.display-title {
+  font-family: 'Pinyon Script', cursive;
+  font-size: 3.5rem;
+  line-height: 1.2;
+  margin-bottom: 0.2rem;
+  color: #2C2C2C;
+}
+.display-author {
+  font-family: 'Inter', sans-serif; font-size: 1.1rem; font-weight: 300;
+  font-style: italic; color: #555; margin-bottom: 3rem; letter-spacing: 0.5px;
+}
+.description-box {
+  font-family: 'Inter', sans-serif; line-height: 1.8; color: #555;
+  font-size: 1.0rem; margin-bottom: 4rem; max-width: 500px; font-weight: 300;
+}
+
+
+
+/* REVIEW LIST */
+
+.section-title {
+  font-family: 'Inter', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 3px; 
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-bottom: 1px solid #E0DDD7;
+  padding-bottom: 10px;
+}
+
+.instances-section {
+  margin-bottom: 4rem;
+}
+
+.owners-list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 0rem;
+}
+
+.owner-card {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 140px; 
+  align-items: center;
+  padding: 1rem 0; 
+  background: transparent;
+  border-bottom: 1px solid #E0DDD7; 
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.owner-card:hover {
+  padding-left: 1rem; 
+}
+
+
+.owner-profile-link {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  cursor: pointer;
+}
+
+.owner-avatar {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background-color: #F4F1EC;
+  color: #2C2C2C;
+  border: 1px solid #2C2C2C; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+
+.owner-name {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #2C2C2C;
+  margin-bottom: 4px;
+}
+
+.owner-rating {
+  position: relative;
+  font-size: 14px;
+  width: max-content;
+}
+
+.stars-background {
+  color: #ddd;
+}
+
+.stars-filled {
+  color: #A63D40;
+  position: absolute;
+  top: 0;
+  left: 0;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.owner-profile-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.owner-profile-link:hover {
+  opacity: 0.8;
+}
+
+
+.book-condition-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.condition-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.condition-label strong {
+  color: #2C2C2C;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.btn-details {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #2C2C2C;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  opacity: 0.6;
+  cursor: pointer;
+  text-align: left;
+  transition: opacity 0.3s;
+}
+
+.btn-details:hover {
+  opacity: 1;
+}
+
+.btn-request {
+  background-color: #2C2C2C;
+  color: #F9F7F2;
+  border: none;
+  padding: 12px 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-request:hover {
+  background-color: #444;
+}
+
+.availability-info {
+  text-align: right;
+}
+
+.status-tag {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.availability-info small {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  color: #BCB8B1;
+  font-style: italic;
+}
+
+
+
+/* ПОХОЖИЕ КНИГИ */
+
+.similar-books-section {
+  width: 100%;
+  max-width: 1100px;
+  margin-top: 2rem;
+  padding-top: 2rem;
+}
+
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 2rem;
+}
+
+.book-card {
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.3s ease;
+}
+
+.book-card:hover { transform: translateY(-5px); }
+.book-card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+.book-card h3 { font-family: 'Inter', sans-serif; font-size: 0.95rem; margin-top: 0.5rem; text-align: center; }
+
+.back-link {
+  font-family: 'Inter', sans-serif; font-size: 0.85rem; color: #2C2C2C;
+  text-decoration: none; border-bottom: 1px solid transparent; width: fit-content;
+  transition: border-bottom 0.3s ease;
+}
+.back-link:hover { border-bottom: 1px solid #2C2C2C; }
+
+.no-similar-container {
+  padding: 3rem;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.02); 
+  border: 1px dashed #E0DDD7; 
+  border-radius: 4px;
+}
+
+.no-similar-container p {
+  font-family: 'Inter', sans-serif;
+  color: #888;
+  font-style: italic;
+}
+
+@media (max-width: 968px) {
+  .book-detail-wrapper { flex-direction: column; align-items: center; gap: 3rem; }
+  .cover-section { position: static; width: 80%; max-width: 350px; }
+  .content-section { text-align: center; align-items: center; }
+  .meta-header { justify-content: center; }
+  .owner-card { flex-direction: column; gap: 1rem; text-align: center; }
+  .owner-main { flex-direction: column; }
+}
+
+
+
+
+
+/* МОДАЛЬНОЕ ОКНО */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(44, 44, 44, 0.4); 
+  backdrop-filter: blur(4px); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  background-color: #FDFCFB;
+  max-width: 500px; 
+  padding: 4rem 3.5rem; 
+  border-radius: 8px;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  position: relative;
+  transform: translateY(20px);
+  opacity: 0;
+  animation: slideUp 0.3s ease forwards;
+  width: 90%;
+  max-width: 600px;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 3rem 3rem;
+}
+
+@keyframes slideUp {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.close-btn {
+  position: absolute; 
+  top: 30px;
+  right: 30px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 200;
+  font-size: 1.2rem;
+  opacity: 0.4;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  opacity: 1;
+  transform: rotate(90deg); 
+}
+
+.section-title-modal {
+  font-family: 'Inter', sans-serif;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 2.5rem;
+  color: #2C2C2C;
+
+  letter-spacing: 3px; 
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-bottom: 1px solid #E0DDD7;
+  padding-bottom: 10px;
+}
+
+.photo-gallery {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-bottom: 3rem;
+}
+
+.photo-gallery img {
+  width: 100px;
+  height: 100px;
+  filter: grayscale(20%); 
+  transition: all 0.4s ease;
+  cursor: zoom-in;
+  border-radius: 4px;
+}
+
+.photo-gallery img:hover {
+  filter: grayscale(0%);
+  transform: translateY(-3px);
+}
+
+.review-item {
+  border: none;
+  padding: 0;
+  margin-bottom: 1.5rem;
+  text-align: left;
+  border-bottom: 1px solid #E0DDD7;
+}
+
+.reviewer-name {
+  font-weight: 500;
+  cursor: pointer;
+  color: #2C2C2C;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.reviewer-name:hover {
+  color: #A63D40;
+}
+
+.review-header {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.review-text {
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+.review-item strong {
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-size: 0.7rem;
+  color: #A88F63; 
+}
+
+.review-item p {
+  font-family: 'Inter', sans-serif;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: #444;
+  margin-top: 8px;
+}
+
+.vintage-input {
+  border: none;
+  border-bottom: 1px solid #E0DDD7;
+  text-align: center; 
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  padding: 10px;
+  transition: border-color 0.4s;
+  width: 100%;
+  max-width: 70px;
+  background-color: #FDFCFB;
+}
+
+.vintage-input:focus {
+  outline: none; 
+  border-bottom-color: #2C2C2C;
+  transform: scale(1.02);
+}
+
+.vintage-input:focus-visible {
+  outline: none;
+}
+
+.request-form {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  margin-top: 2rem;
+}
+
+.input-group {
+  flex: 1;
+}
+
+.input-label {
+  letter-spacing: 1px;
+  margin-bottom: 7px;
+  display: block;
+}
+
+.btn-request-modal {
+  padding: 8px 18px; 
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  border: 1px solid #2C2C2C;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-request-modal:hover {
+  background-color: #2C2C2C;
+  color: white;
+}
+
+.modal-footer {
+  margin-top: 2rem;
+}
+
+.image-preview-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3000;
+  animation: fadeIn 0.3s ease;
+}
+
+.preview-image {
+  max-width: 95%;
+  max-height: 95%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  animation: zoomIn 0.3s ease;
+  cursor: zoom-out;
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.wait-info {
+  color: #666666;
+}
