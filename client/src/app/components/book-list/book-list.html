@@ -3,13 +3,20 @@
 
   <div class="book-grid">
     @for (book of books; track book.id) {
-      <a [routerLink]="['/books', book.id]" class="book-card" [class.unavailable]="!book.available">
+      <a [routerLink]="['/books', book.id]" 
+         class="book-card" 
+         [class.unavailable]="!isAnyInstanceAvailable(book)">
+        
         <div class="book-cover-wrapper">
           <img [src]="book.cover" [alt]="book.title" class="book-cover">
           
-          @if (!book.available) {
+          @if (book.instances.length === 0) {
+            <div class="status-overlay no-offers">
+              <span>No copies available</span>
+            </div>
+          } @else if (!isAnyInstanceAvailable(book)) {
             <div class="status-overlay">
-              <span>On Loan</span>
+              <span>All copies on loan</span>
             </div>
           }
 
@@ -27,7 +34,8 @@
           </p>
 
           <div class="book-meta">
-            <span class="condition-tag">{{ book.condition }}</span>
+            <span class="genre-tag">{{ book.genre }}</span>
+            <span class="count-tag">{{ book.instances.length }} offers</span>
           </div>
         </div>
       </a>
