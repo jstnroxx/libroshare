@@ -1,6 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    rating = models.FloatField(default=0)
+    bio = models.TextField(blank=True)
+    is_blocked = models.BooleanField(default=False)
+
+
 class Book(models.Model):
     CONDITION_CHOICES = [
         ('new', 'New'),
@@ -12,8 +20,26 @@ class Book(models.Model):
     description = models.TextField()
     year = models.IntegerField()
     condition = models.CharField(max_length=10, choices=CONDITION_CHOICES)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="books")
     available = models.BooleanField(default=True)
+
+
+class BookOffer(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="offers")
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    condition = models.CharField(max_length=20)
+    available_copies = models.IntegerField(default=1)
+    total_lends = models.IntegerField(default=0)
+
+
+class Review(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="reviews")
+    reviewer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reviews")
+
+    rating = models.IntegerField()
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 class Request(models.Model):
@@ -23,13 +49,8 @@ class Request(models.Model):
         ('rejected', 'Rejected'),
     ]
 
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    requester = models.ForeignKey(User, on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="requests")
+    requester = models.ForeignKey(User, on_delete=models.CASCADE, related_name="requests_sent")
+
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
-
-
-class Review(models.Model):
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    reviewer = models.ForeignKey(User, on_delete=models.CASCADE)
-    rating = models.IntegerField()
-    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
