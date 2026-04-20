@@ -1,1 +1,44 @@
-<p>book-list works!</p>
+<div class="container">
+  <h2 class="section-title">Library Collection</h2>
+
+  <div class="book-grid">
+    @for (book of books; track book.id) {
+      <a [routerLink]="['/books', book.id]" 
+         class="book-card" 
+         [class.unavailable]="!isAnyInstanceAvailable(book)">
+        
+        <div class="book-cover-wrapper">
+          <img [src]="book.cover" [alt]="book.title" class="book-cover">
+          
+          @if (book.instances.length === 0) {
+            <div class="status-overlay no-offers">
+              <span>No copies available</span>
+            </div>
+          } @else if (!isAnyInstanceAvailable(book)) {
+            <div class="status-overlay">
+              <span>All copies on loan</span>
+            </div>
+          }
+
+          <div class="hover-overlay"></div>
+        </div>
+
+        <div class="book-info">
+          <h3 class="book-title">{{ book.title }}</h3>
+          
+          <p class="book-author">
+            {{ book.author }}
+            @if (book.year) {
+              <span class="book-year"> • {{ book.year }}</span>
+            }
+          </p>
+
+          <div class="book-meta">
+            <span class="genre-tag">{{ book.genre }}</span>
+            <span class="count-tag">{{ book.instances.length }} offers</span>
+          </div>
+        </div>
+      </a>
+    }
+  </div>
+</div>

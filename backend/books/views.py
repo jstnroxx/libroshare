@@ -132,7 +132,6 @@ class MyBooksAPIView(APIView):
         return Response(BookSerializer(books, many=True).data)
 
 
-# ---------------- AUTH ----------------
 
 class RegisterAPIView(APIView):
     def post(self, request):

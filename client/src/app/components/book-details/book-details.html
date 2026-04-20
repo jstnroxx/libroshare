@@ -1,0 +1,189 @@
+<div class="detail-container">
+  @if (book) {
+    <div class="book-detail-wrapper">
+      
+      <div class="cover-section">
+        <img [src]="book.cover" [alt]="book.title" class="main-cover">
+      </div>
+
+      <div class="content-section">
+        
+        <div class="main-info">
+          <div class="meta-header">
+            <span class="genre-badge">{{ book.genre }}</span>
+            <span class="year-label">{{ book.year }}</span>
+          </div>
+          <h1 class="display-title">{{ book.title }}</h1>
+          <p class="display-author">by {{ book.author }}</p>
+          <div class="description-box">
+            <p>{{ book.description }}</p>
+          </div>
+        </div>
+
+        <div class="instances-section">
+  <h2 class="section-title">Available from</h2>
+  
+  <div class="owners-list">
+    @for (item of book.instances; track item.ownerId) {
+      <div class="owner-card" [class.on-loan]="!item.isAvailable">
+        
+        <a 
+          class="owner-profile-link" 
+          [routerLink]="['/profile', item.ownerId]"
+          title="View Profile"
+        >
+          <div class="owner-avatar">{{ item.ownerName[0] }}</div>
+          <div class="owner-info">
+            <span class="owner-name">{{ item.ownerName }}</span>
+            <div class="owner-rating">
+              <span class="stars-background">★★★★★</span>
+              <span class="stars-filled" 
+                    [style.width.%]="item.ownerRating * 20">
+                ★★★★★
+              </span>
+          </div>
+          </div>
+        </a>
+
+        <div class="book-condition-preview">
+          <span class="condition-label">Condition: <strong>{{ item.condition }}</strong></span>
+          <button class="btn-details" (click)="openRequestModal(item)">
+            View photos & reviews
+          </button>
+        </div>
+
+        <div class="action-area">
+          @if (item.isAvailable) {
+            <button class="btn-request" (click)="openRequestModal(item)">Request</button>
+          } @else {
+            <div class="availability-info">
+              <span class="status-tag">On Loan</span>
+              
+              @if (item.nextAvailableDate) {
+                <small>Expected back: {{ item.nextAvailableDate | date:'dd.MM' }}</small>
+              } @else {
+                <small>Return date unknown</small>
+              }
+            </div>
+          }
+        </div>
+
+      </div>
+    }
+  </div>
+  </div>
+
+        <a routerLink="/books" class="back-link">← Back to collection</a>
+      </div>
+    </div>
+
+  <div class="similar-books-section">
+    <h2 class="section-title">Similar in {{ book.genre }}</h2>
+    
+    @if (similarBooks.length > 0) {
+      <div class="book-grid">
+        @for (sBook of similarBooks; track sBook.id) {
+          <a [routerLink]="['/books', sBook.id]" class="book-card">
+            <div class="book-cover-wrapper">
+              <img [src]="sBook.cover" [alt]="sBook.title">
+            </div>
+            <h3>{{ sBook.title }}</h3>
+          </a>
+        }
+      </div>
+    } @else {
+      <div class="no-similar-container">
+        <p>No similar books found in this genre. Explore our full catalog to find more!</p>
+      </div>
+    }
+  </div>
+
+  } @else {
+    <div class="error-state">
+      <p>Book not found. It might have been removed from the library.</p>
+      <a routerLink="/books" class="back-link">Return to Catalog</a>
+    </div>
+  }
+</div>
+
+@if (isModalOpen && selectedInstance) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <a class="close-btn" (click)="closeModal()">×</a>
+      
+      <h2 class="section-title-modal">
+        @if (selectedInstance.isAvailable) {
+          Borrow from {{ selectedInstance.ownerName }}
+        } @else {
+          Status: {{ selectedInstance.ownerName }}'s copy
+        }
+      </h2>
+      
+      <div class="photo-gallery">
+        @for (photo of selectedInstance.realPhotos; track photo) {
+          <img 
+            [src]="photo" 
+            alt="Condition photo"
+            (click)="openImagePreview(photo)"
+          >
+        }
+      </div>
+
+      <div class="condition-history">
+        <h3 class="history-title">Condition History</h3>
+        <div class="reviews-container">
+          @for (rev of selectedInstance.instanceReviews; track rev.date) {
+            <div class="review-item">
+              <div class="review-header">
+                <a 
+                  class="reviewer-name"
+                  [routerLink]="['/profile', rev.reviewerId]"
+                >
+                  {{ rev.reviewerName }}
+                </a>
+                <div class="review-rating owner-rating">
+                  <span class="stars-background">★★★★★</span>
+                  <span class="stars-filled" [style.width.%]="rev.rating * 20">
+                    ★★★★★
+                  </span>
+                </div>
+              </div>
+              <p class="review-text">{{ rev.comment }}</p>
+            </div>
+          } @empty {
+            <p class="no-reviews">No condition reports yet.</p>
+          }
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        @if (selectedInstance.isAvailable) {
+          <div class="request-form">
+            <div class="input-group">
+              <label class="input-label"><strong>Desired duration (days)</strong></label>
+              <input type="number" placeholder="14" class="vintage-input">
+            </div>
+            <button class="btn-request-modal">Send Request</button>
+          </div>
+        } @else {
+          <div class="on-loan-message">
+            <p class="status-warning"><strong>Currently on loan</strong></p>
+            <p class="wait-info">
+              Expected back on <strong>{{ selectedInstance.nextAvailableDate | date:'dd.MM' }}</strong>.
+            </p>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+}
+
+@if (isImagePreviewOpen && selectedImage) {
+  <div class="image-preview-overlay" (click)="closeImagePreview()">
+    <img 
+      [src]="selectedImage" 
+      class="preview-image"
+      (click)="$event.stopPropagation()"
+    >
+  </div>
+}

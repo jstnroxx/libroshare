@@ -3,3 +3,4 @@ __pycache__/
 .vscode/
 *.pyc
 *.sqlite3
+.DS_Store
