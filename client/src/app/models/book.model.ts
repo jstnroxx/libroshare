@@ -2,6 +2,7 @@ export interface Book {
   id: number;
   title: string;
   author: string;
+<<<<<<< HEAD
   genre: string; 
   description: string;
   year: number;
@@ -32,4 +33,12 @@ export interface BookInstance {
   nextAvailableDate?: Date; 
   
   pendingRequestsCount: number;
+=======
+  description: string;
+  condition: 'new' | 'used';
+  owner: number; 
+  available: boolean;
+  cover?: string;
+  year?: number;
+>>>>>>> main
 }
