@@ -1,0 +1,486 @@
+{
+  "info": {
+    "_postman_id": "61724bda-025f-4176-a276-951223fcca6a",
+    "name": "LibroShare API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53655507",
+    "_collection_link": "https://go.postman.co/collection/53655507-61724bda-025f-4176-a276-951223fcca6a?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Register",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"test\",\r\n  \"password\": \"123456\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/register/",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "register",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"test\",\r\n  \"password\": \"123456\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/login/",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "login",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GetAllBooks",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"test\",\r\n  \"password\": \"123456\"\r\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/books/",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "books",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CreateBook",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2Nzk3Mjg2LCJpYXQiOjE3NzY3OTM2ODYsImp0aSI6IjQ1MzMwMjQ2YmEzZTQyMzViM2I4ZmU3MWFiNjNkNzhiIiwidXNlcl9pZCI6IjMifQ.BDZ5MX67Wkk1JpSncv9YMDha1nzgdbp5kWuTyCOCPAY",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"Harry Potter\",\r\n  \"author\": \"Rowling\",\r\n  \"description\": \"Magic book\",\r\n  \"year\": 2000,\r\n  \"condition\": \"new\",\r\n  \"genre\": \"fantasy\",\r\n  \"cover\": \"https://img.com/1.jpg\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/books/",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "books",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GetById",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2Nzk3Mjg2LCJpYXQiOjE3NzY3OTM2ODYsImp0aSI6IjQ1MzMwMjQ2YmEzZTQyMzViM2I4ZmU3MWFiNjNkNzhiIiwidXNlcl9pZCI6IjMifQ.BDZ5MX67Wkk1JpSncv9YMDha1nzgdbp5kWuTyCOCPAY",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"Harry Potter\",\r\n  \"author\": \"Rowling\",\r\n  \"description\": \"Magic book\",\r\n  \"year\": 2000,\r\n  \"condition\": \"new\",\r\n  \"genre\": \"fantasy\",\r\n  \"cover\": \"https://img.com/1.jpg\"\r\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/books/1",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "books",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DeleteBook",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2Nzk3Mjg2LCJpYXQiOjE3NzY3OTM2ODYsImp0aSI6IjQ1MzMwMjQ2YmEzZTQyMzViM2I4ZmU3MWFiNjNkNzhiIiwidXNlcl9pZCI6IjMifQ.BDZ5MX67Wkk1JpSncv9YMDha1nzgdbp5kWuTyCOCPAY",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/books/1/",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "books",
+            "1",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CreateRequest",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {
+          "content-type": true
+        }
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2Nzk3Mjg2LCJpYXQiOjE3NzY3OTM2ODYsImp0aSI6IjQ1MzMwMjQ2YmEzZTQyMzViM2I4ZmU3MWFiNjNkNzhiIiwidXNlcl9pZCI6IjMifQ.BDZ5MX67Wkk1JpSncv9YMDha1nzgdbp5kWuTyCOCPAY",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"book\": 1\r\n}",
+          "options": {
+            "raw": {
+              "language": "text"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/requests/",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "requests",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CreateReview",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {
+          "content-type": true
+        }
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2Nzk3Mjg2LCJpYXQiOjE3NzY3OTM2ODYsImp0aSI6IjQ1MzMwMjQ2YmEzZTQyMzViM2I4ZmU3MWFiNjNkNzhiIiwidXNlcl9pZCI6IjMifQ.BDZ5MX67Wkk1JpSncv9YMDha1nzgdbp5kWuTyCOCPAY",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"book_id\": 1,\r\n  \"rating\": 5,\r\n  \"comment\": \"Great book\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "text"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/reviews/",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "reviews",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GetRequests",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2Nzk4NjUzLCJpYXQiOjE3NzY3OTUwNTMsImp0aSI6IjE5N2MwYzFlMTg2NjRjNTBiNzk5MjNiMjY1MGI1YmQ1IiwidXNlcl9pZCI6IjMifQ.-IVe431dV3qGxMLNhDEw8NQqKP4GTvfffuhBH5fSPiw",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"test\",\r\n  \"password\": \"123456\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/requests/",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "requests",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GetReviews",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2Nzk4NjUzLCJpYXQiOjE3NzY3OTUwNTMsImp0aSI6IjE5N2MwYzFlMTg2NjRjNTBiNzk5MjNiMjY1MGI1YmQ1IiwidXNlcl9pZCI6IjMifQ.-IVe431dV3qGxMLNhDEw8NQqKP4GTvfffuhBH5fSPiw",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"status\": \"approved\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/reviews/",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "reviews",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GetProfile",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2Nzk4NjUzLCJpYXQiOjE3NzY3OTUwNTMsImp0aSI6IjE5N2MwYzFlMTg2NjRjNTBiNzk5MjNiMjY1MGI1YmQ1IiwidXNlcl9pZCI6IjMifQ.-IVe431dV3qGxMLNhDEw8NQqKP4GTvfffuhBH5fSPiw",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"status\": \"approved\"\r\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/profile/",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "profile",
+            ""
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
