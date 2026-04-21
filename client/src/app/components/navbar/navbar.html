@@ -14,7 +14,7 @@
   </div>
 
   <div class="user-actions">
-    <a routerLink="/profile" class="profile-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" [style.visibility]="authService.isAuthenticated() ? 'visible' : 'hidden'">Profile</a>
+    <a routerLink="/profile" class="profile-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" [style.display]="authService.isAuthenticated() ? 'inline-block' : 'none'">Profile</a>
 
     @if (!authService.isAuthenticated()) {
         <a class="login-link" routerLink="/login" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Login</a>
