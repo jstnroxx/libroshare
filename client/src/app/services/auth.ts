@@ -7,7 +7,7 @@ import { Observable, tap } from 'rxjs';
 })
 
 export class Auth {
-  isAuthenticated: WritableSignal<boolean> = signal(false);
+  isAuthenticated: WritableSignal<boolean> = signal(localStorage.getItem('refresh_token') ? true : false);
 
   private API_URL = 'http://localhost:8000/api';
   private http = inject(HttpClient)
@@ -28,7 +28,7 @@ export class Auth {
   logout() {
     this.http.post(`${this.API_URL}/logout/`, {
       refresh: this.getRefreshToken()
-    }).subscribe()
+    }).subscribe();
 
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
@@ -36,35 +36,27 @@ export class Auth {
     this.isAuthenticated.set(false)
   }
 
-  login(_username: string, _password: string): void {
-    this.http.post(`${this.API_URL}/login/`, {
+  login(_username: string, _password: string): Observable<any> {
+    return this.http.post(`${this.API_URL}/login/`, {
       username: _username,
       password: _password
-    }).subscribe({
-      next: (response: any) => {
-        this.setTokens(response.access, response.refresh)
-
-        this.isAuthenticated.set(true)
-      },
-      error: (err) => {
-        console.error('Error:', err)
-        this.isAuthenticated.set(false)
-      }
-    })
+    }).pipe(
+      tap((response: any) => {
+        this.setTokens(response.access, response.refresh);
+        this.isAuthenticated.set(true);
+      })
+    );
   }
 
-  register(_username: string, _password: string): void {
-    this.http.post(`${this.API_URL}/login/`, {
+  register(_username: string, _password: string): Observable<any> {
+    return this.http.post(`${this.API_URL}/register/`, {
       username: _username,
       password: _password
-    }).subscribe({
-      next: (response: any) => {
-        this.login(_username, _password)
-      },
-      error: (err) => {
-        console.error('Error:', err)
-      }
-    })
+    }).pipe(
+      tap((response: any) => {
+        this.login(_username, _password).subscribe();
+      })
+    );
   }
 
   refreshToken(): Observable<any> {

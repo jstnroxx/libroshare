@@ -19,7 +19,7 @@
     @if (!authService.isAuthenticated()) {
         <a class="login-link" routerLink="/login" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Login</a>
     } @else {
-        <button class="logout-btn" (click)="authService.logOut()">Logout</button>
+        <button class="logout-btn" (click)="logout()">Logout</button>
     }
   </div>
 </nav>

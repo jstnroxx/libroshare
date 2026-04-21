@@ -23,7 +23,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(authReq).pipe(
     catchError((error) => {
-      if (error.status === 401 && !req.url.includes('/refresh/')) {
+      if (error.status === 401 && !req.url.includes('/refresh/') && !req.url.includes('/logout/') && !req.url.includes('/login/') && !req.url.includes('/register/')) {
         if (!isRefreshing) {
           isRefreshing = true
 
@@ -44,7 +44,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
             catchError((refreshError) => {
               isRefreshing = false;
 
-              authService.logout();
+              if (localStorage.getItem('refresh_token')) {
+                authService.logout();
+              }
+
               router.navigate(['/login']);
 
               return throwError(() => refreshError);
