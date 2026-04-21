@@ -19,9 +19,12 @@ export interface BookReview {
 }
 
 export interface BookInstance {
+  id: number;
   ownerId: number;
   ownerName: string;
   ownerRating: number; 
+  borrowerId?: number;
+  borrowerName?: string;
 
   condition: string;
   realPhotos: string[];
