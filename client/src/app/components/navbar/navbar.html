@@ -14,7 +14,12 @@
   </div>
 
   <div class="user-actions">
-    <a routerLink="/profile" class="profile-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Profile</a>
-    <button class="logout-btn">Logout</button>
+    <a routerLink="/profile" class="profile-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" [style.display]="authService.isAuthenticated() ? 'inline-block' : 'none'">Profile</a>
+
+    @if (!authService.isAuthenticated()) {
+        <a class="login-link" routerLink="/login" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Login</a>
+    } @else {
+        <button class="logout-btn" (click)="authService.logOut()">Logout</button>
+    }
   </div>
 </nav>
