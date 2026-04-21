@@ -1,0 +1,59 @@
+<div class="shelf-container">
+  <h1>My Bookshelf</h1>
+
+  <section class="shelf-section">
+    <h2>Currently Reading</h2>
+    <div class="book-grid">
+      @if (myBorrowedBooks$ | async; as borrowed) {
+        @for (book of borrowed; track book.id) {
+          <div class="book-item">
+            <app-book-card [book]="book"></app-book-card>
+            
+            @if (book.instances[0]?.nextAvailableDate) {
+              <div class="info">
+                Return by {{ book.instances[0].nextAvailableDate | date:'mediumDate' }}
+              </div>
+            }
+          </div>
+        } @empty {
+          <div class="empty-msg">You aren't reading any borrowed books yet.</div>
+        }
+      } @else {
+        <div class="empty-msg">Loading borrowed books...</div>
+      }
+    </div>
+  </section>
+
+  <hr>
+
+  <section class="shelf-section">
+    <h2>My Personal Library</h2>
+    <div class="book-grid">
+      @if (myLentBooks$ | async; as lent) {
+        @for (book of lent; track book.id) {
+          <div class="book-item">
+            @if (book.instances.length > 0 && (book.instances[0].pendingRequestsCount || 0) > 0) {
+              <div class="alert">
+                {{ book.instances[0].pendingRequestsCount }} requests
+              </div>
+            }
+            
+            <app-book-card [book]="book"></app-book-card>
+            
+            <div class="info">
+              @if (book.instances[0]?.isAvailable) {
+                Available
+              } @else {
+                Currently Lent
+              }
+            </div>
+          </div>
+        } @empty {
+          <div class="empty-msg">Your library is empty.</div>
+        }
+      } @else {
+        <div class="empty-msg">Loading your library...</div>
+      }
+    </div>
+  </section>
+</div>
