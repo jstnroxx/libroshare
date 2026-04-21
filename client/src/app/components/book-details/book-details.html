@@ -12,6 +12,9 @@
           <div class="meta-header">
             <span class="genre-badge">{{ book.genre }}</span>
             <span class="year-label">{{ book.year }}</span>
+            <button class="close-details-x" (click)="goBack()" title="Close and go back">
+              ×
+            </button>
           </div>
           <h1 class="display-title">{{ book.title }}</h1>
           <p class="display-author">by {{ book.author }}</p>
@@ -47,33 +50,46 @@
 
         <div class="book-condition-preview">
           <span class="condition-label">Condition: <strong>{{ item.condition }}</strong></span>
-          <button class="btn-details" (click)="openRequestModal(item)">
+          <!-- <button class="btn-details" (click)="openRequestModal(item)">
             View photos & reviews
-          </button>
+          </button> -->
         </div>
 
         <div class="action-area">
-          @if (item.isAvailable) {
-            <button class="btn-request" (click)="openRequestModal(item)">Request</button>
-          } @else {
-            <div class="availability-info">
-              <span class="status-tag">On Loan</span>
-              
-              @if (item.nextAvailableDate) {
-                <small>Expected back: {{ item.nextAvailableDate | date:'dd.MM' }}</small>
-              } @else {
-                <small>Return date unknown</small>
-              }
-            </div>
-          }
-        </div>
+        @if (item.ownerId === currentUserId) {
+          <div class="owner-status">
+            <span class="status-tag owner">Your Copy</span>
+            <button class="btn-manage" (click)="manageInstance(item)">Manage</button>
+          </div>
+        } 
+        
+        @else if (item.currentBorrowerId === currentUserId) {
+          <div class="borrower-status">
+            <span class="status-tag reading">Currently Reading</span>
+            <button class="btn-review" (click)="openRequestModal(item)">Leave a Review</button>
+          </div>
+        }
+
+        @else if (item.isAvailable) {
+          <button class="btn-request" (click)="openRequestModal(item)">Request</button>
+        } 
+
+        @else {
+          <div class="availability-info">
+            <span class="status-tag">On Loan</span>
+            @if (item.nextAvailableDate) {
+              <small>Expected back: {{ item.nextAvailableDate | date:'dd.MM' }}</small>
+            } @else {
+              <small>Return date unknown</small>
+            }
+          </div>
+        }
+      </div>
 
       </div>
     }
   </div>
   </div>
-
-        <a routerLink="/books" class="back-link">← Back to collection</a>
       </div>
     </div>
 
@@ -157,15 +173,59 @@
       </div>
 
       <div class="modal-footer">
-        @if (selectedInstance.isAvailable) {
+        
+        @if (selectedInstance.currentBorrowerId === currentUserId) {
+        <div class="review-form">
+          <h3 class="history-title">Your Experience</h3>
+          
+          <div class="rating-picker">
+            <span class="input-label"><strong>Your Rating:</strong></span>
+            <div class="stars-selection">
+              @for (star of [1, 2, 3, 4, 5]; track star) {
+                <span 
+                  class="star-icon" 
+                  [class.active]="star <= reviewRating"
+                  (click)="setRating(star)"
+                >
+                  ★
+                </span>
+              }
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label class="input-label" for="review-text"><strong>Write your feedback</strong></label>
+            <textarea 
+              id="review-text"
+              name="reviewText" 
+              [(ngModel)]="reviewText" 
+              placeholder="How was the book condition?" 
+              class="vintage-input"
+              rows="3"
+            ></textarea>
+          </div>
+
+          <button 
+            class="btn-request-modal" 
+            [disabled]="!reviewText.trim() || reviewRating === 0 || isSubmitting"
+            (click)="sendReview()"
+          >
+            {{ isSubmitting ? 'Sending...' : 'Send Review' }}
+          </button>
+        </div>
+        }
+
+        @else if (selectedInstance.isAvailable) {
           <div class="request-form">
             <div class="input-group">
-              <label class="input-label"><strong>Desired duration (days)</strong></label>
+              <label class="input-lbl"><strong>Desired duration (days)</strong></label>
               <input type="number" placeholder="14" class="vintage-input">
             </div>
             <button class="btn-request-modal">Send Request</button>
           </div>
-        } @else {
+        }
+
+        @else {
           <div class="on-loan-message">
             <p class="status-warning"><strong>Currently on loan</strong></p>
             <p class="wait-info">

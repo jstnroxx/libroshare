@@ -5,25 +5,36 @@ import { Book } from '../../models/book.model';
 import { RouterLink } from '@angular/router';
 import { BookService } from '../../services/book';
 import { BookInstance } from '../../models/book.model';
+import { FormsModule } from '@angular/forms';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-book-details',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './book-details.html', 
   styleUrls: ['./book-details.css']    
 })
 export class BookDetails implements OnInit {
-  book: Book | undefined;
+  currentUserId = 1; // should be replaced with actual user ID from auth service
+  book!: Book | undefined;
+
   similarBooks: Book[] = [];
+
   isModalOpen = false;
   selectedInstance: BookInstance | null = null;
+
   isImagePreviewOpen = false;
   selectedImage: string | null = null;
 
+  reviewRating: number = 0;
+  reviewText: string = ''; 
+  isSubmitting: boolean = false;
+
   constructor(
     private route: ActivatedRoute,
-    private bookService: BookService 
+    private bookService: BookService,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -62,5 +73,35 @@ export class BookDetails implements OnInit {
   closeImagePreview() {
     this.isImagePreviewOpen = false;
     this.selectedImage = null;
+  }
+
+  manageInstance(instance: BookInstance) {
+    console.log('Managing my copy:', instance.id);
+  }
+
+  setRating(value: number) {
+    this.reviewRating = value;
+  }
+
+  sendReview() {
+    if (!this.reviewText.trim() || this.reviewRating === 0) return;
+    
+    this.isSubmitting = true;
+
+    setTimeout(() => {
+      console.log('Review successfully saved to database');
+      
+      this.isSubmitting = false;
+      this.reviewText = '';
+      this.reviewRating = 0;
+      
+      this.closeModal(); 
+      
+      alert('Thank you! Your review has been submitted.');
+    }, 1000);
+  }
+
+  goBack() {
+    this.location.back();
   }
 }

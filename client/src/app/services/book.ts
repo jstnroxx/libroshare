@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, delay } from 'rxjs';
 import { Book } from '../models/book.model';
 
 @Injectable({
@@ -18,7 +18,8 @@ export class BookService {
       totalBorrows: 0,
       instances: [
         {
-          ownerId: 101,
+          id: 1,
+          ownerId: 1,
           ownerName: 'Alice',
           ownerRating: 4.5,
           condition: 'used',
@@ -43,6 +44,7 @@ export class BookService {
           pendingRequestsCount: 2
         },
         {
+          id: 2,
           ownerId: 102,
           ownerName: 'Bob',
           ownerRating: 4.0,
@@ -65,23 +67,36 @@ export class BookService {
       totalBorrows: 0,
       instances: [
         {
+          id: 3,
           ownerId: 103,
           ownerName: 'Charlie',
           ownerRating: 4.2,
           condition: 'used',
           isAvailable: false,
+          currentBorrowerId: 1,
           nextAvailableDate: new Date('2024-03-01'),
           realPhotos: ['real.jpeg'],
           instanceReviews: [
             {
-              reviewerId: 203,
-              reviewerName: 'Alice',
+              reviewerId: 101,
+              reviewerName: 'Alen',
               rating: 4,
               comment: 'Good condition, but a few pages are slightly worn.',
               date: new Date('2024-02-10')
             }
           ],
           pendingRequestsCount: 1
+        },
+        {
+          id: 4,
+          ownerId: 104,
+          ownerName: 'Dave',
+          ownerRating: 4.8,
+          condition: 'new',
+          isAvailable: true,
+          realPhotos: ['real.jpeg'],
+          instanceReviews: [],
+          pendingRequestsCount: 0
         }
       ]
     },
@@ -96,7 +111,8 @@ export class BookService {
       totalBorrows: 0,
       instances: [
         {
-          ownerId: 101,
+          id: 4,
+          ownerId: 1,
           ownerName: 'Alice',
           ownerRating: 4.5,
           condition: 'used',
@@ -144,7 +160,7 @@ export class BookService {
   constructor() { }
 
   getBooks(): Observable<Book[]> {
-    return of(this.books);
+    return of(this.books).pipe(delay(500));
   }
   
   getBookById(id: number): Observable<Book | undefined> {
