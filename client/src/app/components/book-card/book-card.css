@@ -1,0 +1,114 @@
+.book-card {
+  display: block; 
+  text-decoration: none; 
+  color: inherit; 
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.book-card:hover { transform: translateY(-8px); }
+
+
+.book-cover-wrapper {
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.05); 
+  border-radius: 2px;
+}
+
+.book-cover {
+  display: block; 
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  filter: sepia(0.1);
+  transition: transform 0.5s ease;
+}
+
+.book-card:hover .book-cover { transform: scale(1.05); }
+
+
+.book-info {
+  margin-top: 1.2rem;
+  text-align: center;
+}
+
+.book-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.book-author {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  color: #666;
+  font-style: italic;
+  margin-top: 0.4rem;
+}
+
+.book-year { font-weight: 300; color: #888; }
+
+
+.book-meta {
+  display: flex;
+  justify-content: center;
+  gap: 8px; 
+  margin-top: 10px;
+}
+
+.genre-tag {
+  font-size: 0.65rem;
+  padding: 2px 8px;
+  border: 1px solid #2C2C2C;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #2C2C2C;
+}
+
+.count-tag {
+  font-size: 0.65rem;
+  padding: 2px 8px;
+  background-color: #2C2C2C;
+  color: #F9F7F2;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Статусы (доступна/нет) */
+.book-card.unavailable { opacity: 0.7; }
+
+.status-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(249, 247, 242, 0.8); 
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #2C2C2C;
+}
+
+.hover-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0); 
+  transition: background 0.3s ease;
+  pointer-events: none; 
+}
+
+.book-card:hover .hover-overlay { background: rgba(0, 0, 0, 0.1); }
