@@ -2,7 +2,6 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import Book, BookOffer, Review, Request, Profile
 
-
 class BookSerializer(serializers.ModelSerializer):
     instances = serializers.SerializerMethodField()
     totalBorrows = serializers.SerializerMethodField()
@@ -15,12 +14,15 @@ class BookSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'author',
+            'genre',
             'description',
             'year',
-            'condition',
+            'cover',
             'available',
+
             'ownerId',
             'ownerName',
+
             'instances',
             'totalBorrows'
         ]
@@ -32,10 +34,12 @@ class BookSerializer(serializers.ModelSerializer):
                 "ownerId": o.owner.id,
                 "ownerName": o.owner.username,
                 "ownerRating": getattr(getattr(o.owner, "profile", None), "rating", 0),
+
                 "condition": o.condition,
                 "realPhotos": o.real_photos or [],
                 "isAvailable": o.is_available,
-                "pendingRequestsCount": obj.requests.count()
+
+                "pendingRequestsCount": obj.requests.filter(status="pending").count()
             }
             for o in obj.offers.all()
         ]
@@ -51,13 +55,20 @@ class BookOfferSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
+    reviewerId = serializers.IntegerField(source='reviewer.id', read_only=True)
     reviewerName = serializers.CharField(source='reviewer.username', read_only=True)
     date = serializers.DateTimeField(source='created_at', read_only=True)
-    reviewerId = serializers.IntegerField(source='reviewer.id', read_only=True)
 
     class Meta:
         model = Review
-        fields = ['id', 'rating', 'comment', 'reviewerId', 'reviewerName', 'date']
+        fields = [
+            'id',
+            'reviewerId',
+            'reviewerName',
+            'rating',
+            'comment',
+            'date'
+        ]
 
 
 class RequestSerializer(serializers.ModelSerializer):
@@ -80,6 +91,15 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField()
 
 
+class RegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'password']
+
+    def create(self, validated_data):
+        return User.objects.create_user(**validated_data)
+
+
 class ReviewCreateSerializer(serializers.Serializer):
     book_id = serializers.IntegerField()
     rating = serializers.IntegerField()
@@ -89,12 +109,3 @@ class ReviewCreateSerializer(serializers.Serializer):
         if value < 1 or value > 5:
             raise serializers.ValidationError("Rating must be 1-5")
         return value
-
-
-class RegisterSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['username', 'password']
-
-    def create(self, validated_data):
-        return User.objects.create_user(**validated_data)
