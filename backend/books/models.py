@@ -22,6 +22,8 @@ class Book(models.Model):
     condition = models.CharField(max_length=10, choices=CONDITION_CHOICES)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="books")
     available = models.BooleanField(default=True)
+    genre = models.CharField(max_length=100, blank=True)
+    cover = models.URLField(blank=True)
 
 
 class BookOffer(models.Model):
@@ -31,6 +33,8 @@ class BookOffer(models.Model):
     condition = models.CharField(max_length=20)
     available_copies = models.IntegerField(default=1)
     total_lends = models.IntegerField(default=0)
+    real_photos = models.JSONField(default=list, blank=True)
+    is_available = models.BooleanField(default=True)
 
 
 class Review(models.Model):
