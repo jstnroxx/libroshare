@@ -65,15 +65,23 @@ export class UserProfile implements OnInit {
   }
 
   submitReview() {
+    const myId = this.authService.getUserIdFromToken();
+    
     const review = {
       id: Date.now(),
-      author: `User${this.authService.currentUserId}`,
+      author: `User #${myId}`, 
       rating: this.newReview.rating,
       comment: this.newReview.comment,
       date: new Date().toLocaleDateString()
     };
+
+    if (!this.user.reviews) {
+      this.user.reviews = [];
+    }
+
     this.user.reviews.push(review);
     this.closeReview();
+    this.newReview = { rating: 5, comment: '' }; 
     this.cdr.detectChanges();
   }
 
@@ -86,7 +94,6 @@ export class UserProfile implements OnInit {
       const myId = Number(this.authService.getUserIdFromToken());
 
       this.isMyProfile = (idNum === myId);
-      this.user = null;
       this.userBooks = [];
 
       const profileRequest = this.isMyProfile 
@@ -96,26 +103,32 @@ export class UserProfile implements OnInit {
       profileRequest.subscribe({
         next: (data) => {
           this.user = data;
+          if (!this.user.reviews) this.user.reviews = []; 
           this.cdr.detectChanges();
         },
         error: (err) => {
-          console.warn('Profile data not found on backend. Using fallback.');
+          console.warn('Profile fetch failed:', err);
           this.user = { 
-            name: this.isMyProfile ? 'Your Name' : 'Member', 
-            bio: 'No information available yet.',
-            location: 'Not specified'
+            name: this.isMyProfile ? 'Your Profile' : 'User', 
+            bio: 'Information not provided.',
+            location: 'Earth',
+            reviews: [] 
           };
           this.cdr.detectChanges();
         }
       });
 
       this.bookService.getBooks().subscribe({
-        next: (allBooks) => {
+        next: (allBooks: any[]) => {
+          console.log('Books check for ID:', idNum, allBooks); 
+          
           this.userBooks = allBooks.filter(book => 
-            book.instances.some(inst => inst.ownerId === idNum)
-          );
+          book.instances && book.instances.some((inst: any) => 
+                  Number(inst.ownerId) === Number(idNum)
+           ));
           this.cdr.detectChanges();
-        }
+        },
+        error: (err) => console.error('Could not load books:', err)
       });
     });
   }
