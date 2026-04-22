@@ -1,0 +1,169 @@
+.add-book-page {
+  background-color: #f4f1ea;
+  padding: 40px 20px;
+  font-style: 'Inter', sans-serif;
+}
+
+.form-card {
+  background: #fffdf9; 
+  border: 1px solid #d1ccc0;
+  border-radius: 4px;
+  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.05); 
+  padding: 40px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form-header h2 {
+  font-style: italic;
+  font-size: 2.2rem;
+  color: #2c2c2c;
+  border-bottom: 1px solid #2c2c2c;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 0; 
+  border: none;
+  border-bottom: 2px solid #333; 
+  background: transparent;
+  border-radius: 0;
+  font-size: 1.1rem;
+  transition: all 0.3s;
+}
+
+.search-input:focus {
+  border-bottom-color: #a63d40;
+  outline: none;
+}
+
+.autocomplete-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fffdf9;
+  border: 1px solid #333;
+  z-index: 1000;
+  list-style: none;
+  padding: 0;
+  margin-top: 5px;
+}
+
+.autocomplete-list li {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  transition: background 0.2s;
+}
+
+.autocomplete-list li:hover {
+  background-color: #f4f1ea;
+}
+
+.autocomplete-list li .title {
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.autocomplete-list li .author {
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  color: #555;
+  text-transform: uppercase;
+}
+
+
+.selected-info-card {
+  background: #fff;
+  border: 1px dashed #333; 
+  padding: 20px;
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-primary {
+  background: #2c2c2c;
+  color: #f4f1ea;
+  border: 1px solid #2c2c2c;
+  padding: 12px 25px;
+  border-radius: 0; 
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-primary:hover {
+  background: transparent;
+  color: #2c2c2c;
+}
+
+.btn-link {
+  color: #777;
+  text-transform: lowercase;
+  font-size: 0.8rem;
+}
+
+.input-group label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 5px;
+}
+
+textarea {
+  background: transparent;
+  border: 1px solid #d1ccc0;
+  border-radius: 0;
+  padding: 10px;
+  width: 100%;
+}
+
+.vintage-badge {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 0.7rem;
+  color: #a39e93;
+  letter-spacing: 1px;
+}
+
+.subtitle {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  color: #a63d40;
+  margin-top: 5px;
+  letter-spacing: 1.5px;
+}
+
+.vintage-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, #333, transparent);
+  margin: 30px 0;
+  opacity: 0.3;
+}
+
+.author-label {
+  text-transform: uppercase;
+  display: block;
+  margin-top: 4px;
+  color: #666;
+}
+
+.vintage-input, .vintage-textarea {
+  border: none;
+  border-bottom: 1px solid #d1ccc0;
+  background: transparent;
+  border-radius: 0;
+  padding: 8px 0;
+}
+
+.vintage-input:focus, .vintage-textarea:focus {
+  outline: none;
+  border-bottom-color: #333;
+}

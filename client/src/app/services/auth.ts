@@ -1,6 +1,6 @@
 import { Injectable, inject, signal, WritableSignal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap, of } from 'rxjs'; // Добавил of для обработки ошибок
+import { Observable, tap, of } from 'rxjs'; 
 
 @Injectable({
   providedIn: 'root',

@@ -19,4 +19,10 @@ export const routes: Routes = [
       import('./components/user-profile/user-profile')
         .then(m => m.UserProfile)
     },
+    {
+      path: 'add-book',
+      loadComponent: () =>
+        import('./components/add-book/add-book')
+          .then(m => m.AddBook)
+    }
 ];

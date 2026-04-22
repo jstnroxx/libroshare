@@ -16,7 +16,7 @@ import { Location } from '@angular/common';
   styleUrls: ['./book-details.css']    
 })
 export class BookDetails implements OnInit {
-  currentUserId = 1; // should be replaced with actual user ID from auth service
+  currentUserId = 1;
   book!: Book | undefined;
 
   similarBooks: Book[] = [];
@@ -45,7 +45,7 @@ export class BookDetails implements OnInit {
         this.book = book;
         
         if (book) {
-          this.bookService.getSimilarBooks(book.genre, book.id).subscribe(similar => {
+          this.bookService.getSimilarBooks(book.genre).subscribe(similar => {
             this.similarBooks = similar;
             
             window.scrollTo(0, 0);

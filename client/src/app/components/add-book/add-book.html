@@ -1,0 +1,73 @@
+<div class="add-book-page">
+  <div class="form-card">
+
+    <div class="form-header">
+      <h2>Add to Library</h2>
+      <p class="subtitle">Registry of the Book Exchange Society</p>
+    </div>
+
+    <div class="input-group search-container">
+      <label>Search by Title or Author</label>
+      <div class="search-wrapper">
+        <input 
+          type="text" 
+          [(ngModel)]="searchTerm" 
+          (input)="onSearch()" 
+          placeholder="Start typing book name..."
+          class="search-input">
+        
+        @if (searchResults.length > 0) {
+          <ul class="autocomplete-list">
+            @for (res of searchResults; track res.id) {
+              <li (click)="selectBook(res)">
+                <span class="title">{{ res.title }}</span>
+                <span class="author">by {{ res.author }}</span>
+              </li>
+            }
+          </ul>
+        }
+      </div>
+    </div>
+
+    <div class="vintage-divider"></div>
+
+    @if (selectedBook) {
+      <div class="selected-info-card">
+        <div class="info">
+          <p>ENTRY FOUND: <strong>{{ selectedBook.title }}</strong></p>
+          <small class="author-label">{{ selectedBook.author }}</small>
+        </div>
+        <div class="actions">
+          <button (click)="addExistingBook()" class="btn-primary">Add Copy</button>
+          <button (click)="clearSelection()" class="btn-link">reset</button>
+        </div>
+      </div>
+    } 
+
+    @else if (searchTerm.length > 2 && searchResults.length === 0) {
+      <div class="new-book-section">
+        <p class="hint">Book not in registry. Please record new entry:</p>
+        
+        <div class="input-row">
+          <div class="input-group">
+            <label>Author Name*</label>
+            <input type="text" [(ngModel)]="newBook.author" placeholder="John Doe" class="vintage-input">
+          </div>
+          <div class="input-group">
+            <label>Genre</label>
+            <input type="text" [(ngModel)]="newBook.genre" placeholder="e.g. Classic" class="vintage-input">
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Description / Notes</label>
+          <textarea [(ngModel)]="newBook.description" rows="3" class="vintage-textarea" placeholder="Brief summary..."></textarea>
+        </div>
+
+        <div class="form-footer">
+          <button (click)="addNewBook()" class="btn-primary">Create Record</button>
+        </div>
+      </div>
+    }
+  </div>
+</div>
