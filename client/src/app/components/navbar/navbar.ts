@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { UserProfile } from '../user-profile/user-profile';
 
 import { Auth } from '../../services/auth';
 
