@@ -1,1 +1,29 @@
-<p>login works!</p>
+<div class="container">
+  <h2 class="section-title">Log in or Register</h2>
+
+  <div class="form">
+    <h3 class="label">{{loginMode ? 'Sign in' : 'Sign up'}}</h3>
+
+    <input class="vintage-input" placeholder="Username" [(ngModel)]="username">
+    <br>
+    <input class="vintage-input" placeholder="Password" type="password" [(ngModel)]="password">
+    <br>
+
+    @if (!loginMode) {
+      <input class="vintage-input" placeholder="Confirm password" type="password" [(ngModel)]="confirmedPassword">
+      <br>
+
+      <button class="signin-btn" [disabled]="isSubmitting || username === '' || password === '' || confirmedPassword === ''" (click)="register()">{{isSubmitting ? 'Signing up...' : 'Sign up'}}</button>
+      <br>
+      <p class="register-hint" (click)="toggleMode()">Already have an account? <span style="text-decoration: underline">Sign in</span></p>
+    } @else {
+      <button class="signin-btn" [disabled]="isSubmitting || username === '' || password === ''" (click)="login()">{{isSubmitting ? 'Signing in...' : 'Sign in'}}</button>
+      <br>
+      <p class="register-hint" (click)="toggleMode()">Not a user yet? <span style="text-decoration: underline">Register</span></p>
+    }
+
+    @if (errorMsg()) {
+        <p class="error-msg">{{ errorMsg() }}</p>
+    }  
+  </div>
+</div>

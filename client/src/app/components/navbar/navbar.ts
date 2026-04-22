@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { UserProfile } from '../user-profile/user-profile';
+
+import { Auth } from '../../services/auth';
 
 @Component({
   selector: 'app-navbar',
@@ -10,5 +12,12 @@ import { UserProfile } from '../user-profile/user-profile';
   styleUrls: ['./navbar.css'],
 })
 export class Navbar {
-  myId: number = 1; // Mock user ID for demonstration
+  public authService = inject(Auth)
+  
+  private router = inject(Router)
+
+  logout(): void {
+    this.authService.logout()
+    this.router.navigate(['/login'])
+  }
 }
