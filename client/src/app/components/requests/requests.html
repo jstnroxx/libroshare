@@ -22,6 +22,10 @@
                 <p>&#11088; {{ request.requester.rating }}</p>
             </div>
 
+            <hr style="margin: 0 0 10px 0">
+
+            <p class="for-days">for <span style="text-decoration: underline">{{ request.for_days }}</span> days</p>
+
             <p [class.pending-badge]="request.status === 'pending'" 
             [class.approved-badge]="request.status === 'approved'" 
             [class.rejected-badge]="request.status === 'rejected'">
@@ -36,6 +40,8 @@
                     <button class="accept-btn" (click)="acceptRequest(request.id)" [disabled]="isLoading">Accept</button>
                     <button class="decline-btn" (click)="declineRequest(request.id)" [disabled]="isLoading">Decline</button>
                 </div>
+            } @else {
+                <p class="resolved-at" [style.color]="request.status === 'approved' ? 'green' : 'rgb(255, 90, 90)'">Resolved at {{ request.resolved_at | date: 'short' }}</p>
             }
           </div>
         } @empty {
@@ -70,6 +76,10 @@
                 <p>&#11088; {{ request.requester.rating }}</p>
             </div>
 
+            <hr style="margin: 0 0 10px 0">
+
+            <p class="for-days">for <span style="text-decoration: underline">{{ request.for_days }}</span> days</p>
+
             <p [class.pending-badge]="request.status === 'pending'" 
             [class.approved-badge]="request.status === 'approved'" 
             [class.rejected-badge]="request.status === 'rejected'">
@@ -78,6 +88,10 @@
 
             <p>{{ request.created_at | date: 'medium' }}</p>
             <hr style="margin: 0 0 10px 0">
+
+            @if (!(request.status === 'pending')) {
+                <p class="resolved-at" [style.color]="request.status === 'approved' ? 'green' : 'rgb(255, 90, 90)'">Resolved at {{ request.resolved_at | date: 'short' }}</p>
+            }
           </div>
         } @empty {
           <div class="empty-msg">You didn't send any requests yet.</div>

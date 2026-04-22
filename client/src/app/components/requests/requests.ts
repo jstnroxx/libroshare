@@ -25,6 +25,7 @@ export class Requests implements OnInit {
  mockIncoming: Request[] = [
   {
     id: 101,
+    for_days: 72,
     status: 'pending',
     created_at: new Date(),
     requester: {
@@ -50,8 +51,10 @@ export class Requests implements OnInit {
   },
   {
     id: 102,
+    for_days: 3,
     status: 'approved',
     created_at: new Date(),
+    resolved_at: new Date(),
     requester: {
       id: 2,
       name: 'Alice Smith',
@@ -75,8 +78,10 @@ export class Requests implements OnInit {
   },
   {
     id: 103,
+    for_days: 6,
     status: 'rejected',
     created_at: new Date(),
+    resolved_at: new Date(),
     requester: {
       id: 2,
       name: 'Alice Smith',
@@ -104,6 +109,7 @@ export class Requests implements OnInit {
  mockOutgoing: Request[] = [
   {
     id: 104,
+    for_days: 1,
     status: 'pending',
     created_at: new Date(),
     requester: {
@@ -129,8 +135,10 @@ export class Requests implements OnInit {
   },
   {
     id: 104,
+    for_days: 2,
     status: 'rejected',
     created_at: new Date(),
+    resolved_at: new Date(),
     requester: {
       id: 1,
       name: 'John Doe',
@@ -154,8 +162,10 @@ export class Requests implements OnInit {
   },
   {
     id: 104,
+    for_days: 4,
     status: 'approved',
     created_at: new Date(),
+    resolved_at: new Date(),
     requester: {
       id: 1,
       name: 'John Doe',

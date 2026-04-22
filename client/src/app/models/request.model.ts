@@ -5,6 +5,8 @@ export interface Request {
     id: number,
     bookInstance: BookInstance,
     requester: User,
+    for_days: number,
     status: 'approved' | 'pending' | 'rejected',
-    created_at: Date
+    created_at: Date,
+    resolved_at?: Date
 }

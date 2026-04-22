@@ -189,3 +189,14 @@ button:disabled {
     cursor: default;
     pointer-events: none;
 }
+
+.for-days {
+    font-style: italic;
+    text-align: center;
+}
+
+.resolved-at {
+    text-align: center;
+    font-style: italic;
+    font-weight: 600;
+}
