@@ -5,9 +5,59 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework_simplejwt.tokens import RefreshToken
-
+from rest_framework.response import Response
+from rest_framework import status
 from .models import Book, BookOffer, Request, Profile, Review, UserReview
 from .serializers import *
+
+from rest_framework.permissions import IsAuthenticated
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from .models import Book, BookOffer
+from .serializers import BookSerializer
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from .models import Book, BookOffer
+from .serializers import BookSerializer
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from .models import Book, BookOffer
+from .serializers import BookSerializer
+
+class MyShelfView(APIView):
+    permission_classes = [IsAuthenticated] # Только для залогиненных
+
+    def get(self, request):
+        # Находим офферы юзера и берем связанные с ними книги
+        my_offers = BookOffer.objects.filter(owner=request.user)
+        books = [offer.book for offer in my_offers]
+        
+        serializer = BookSerializer(books, many=True)
+        return Response(serializer.data)
+    
+class AddInstanceView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        book_id = request.data.get('book_id')
+        if not book_id:
+            return Response({"error": "ID книги обязателен"}, status=400)
+            
+        book = Book.objects.get(id=book_id)
+        
+        # Создаем запись о владении (оффер)
+        BookOffer.objects.create(
+            book=book,
+            owner=request.user,
+            condition=request.data.get('condition', 'Good')
+        )
+        return Response({"message": "Книга добавлена на полку"}, status=201)
+    
+
 
 class BookListCreateAPIView(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -18,16 +68,23 @@ class BookListCreateAPIView(APIView):
 
     def post(self, request):
         serializer = BookSerializer(data=request.data)
-        if serializer.is_valid():
-            book = serializer.save()
         
-        # Исправляем тут:
+        if serializer.is_valid():
+            # 1. Сохраняем саму книгу
+            book = serializer.save()
+            
+            # 2. Создаем оффер (связываем книгу с юзером и состоянием)
             BookOffer.objects.create(
                 book=book,
                 owner=request.user,
-                condition=request.data.get("condition", "New") 
-        )
-            return Response(BookSerializer(book).data, status=201)
+                condition=request.data.get("condition", "Good")
+            )
+            
+            # ВАЖНО: Этот return должен быть ВНУТРИ if
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        # ВАЖНО: Этот return должен быть ВНЕ if (сработает, если данные невалидны)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class BookDetailAPIView(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
