@@ -9,7 +9,7 @@ urlpatterns = [
     path('requests/action/<int:id>/', RequestActionAPIView.as_view()),
 
     path('profile/', ProfileAPIView.as_view()),
-
+    path('profile/<int:id>/', ProfileAPIView.as_view()),
     path('register/', RegisterAPIView.as_view()),
     path('logout/', LogoutView.as_view()),
 
