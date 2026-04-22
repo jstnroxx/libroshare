@@ -105,8 +105,7 @@ hr {
   user-select: none;
 }
 
-.accept-btn:active,
-.decline-btn:active {
+button:active {
     opacity: 0.75;
 }
 
@@ -199,4 +198,54 @@ button:disabled {
     text-align: center;
     font-style: italic;
     font-weight: 600;
+}
+
+.batch-flex {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 30px;
+}
+
+.batch-btn {
+  border: 1px solid #2C2C2C;
+  background: transparent;
+  color: #2C2C2C;
+  padding: 6px 20px;
+  border-radius: 0; 
+  text-align: center;
+  cursor: pointer;
+  font-size: 0.9rem;
+  width: 100%;
+  min-width: 175px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: all 0.4s ease, opacity 0.3s ease;
+}
+
+.batch-btn:hover {
+  background: #2C2C2C;
+  color: #F9F7F2;
+}
+
+.vintage-input {
+  display: block;
+  border: none;
+  border-bottom: 1px solid #E0DDD7;
+  box-sizing: border-box;
+  text-align: center; 
+  padding: 10px;
+  transition: border-color 0.4s;
+  width: 100%;
+  min-width: 175px;
+  background-color: #FDFCFB;
+}
+
+.vintage-input:focus {
+  outline: none; 
+  border-bottom-color: #2C2C2C;
+  transform: scale(1.02);
+}
+
+.vintage-input:focus-visible {
+  outline: none;
 }

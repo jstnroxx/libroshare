@@ -4,6 +4,20 @@
   <section class="request-section">
     <h2>Incoming</h2>
     
+    <div class="batch-flex">
+        <div style="display: flex; gap: 15px;">
+            <div>
+                <button class="batch-btn" [disabled]="isLoading" (click)="batchAccept()">Accept all</button><br><br>
+                <input class="vintage-input" placeholder="requester rating >..." type="number" min="0" max="5" step="0.1" [(ngModel)]="batchRatingGT">
+            </div>
+
+            <div>
+                <button class="batch-btn" [disabled]="isLoading" (click)="batchDecline()">Decline all</button><br><br>
+                <input class="vintage-input" placeholder="requester rating <..." type="number" min="0" max="5" step="0.1" [(ngModel)]="batchRatingLT">
+            </div>
+        </div>
+    </div>
+
     <div class="request-grid">
       @if (incomingRequests !== null) {
         @for (request of incomingRequests; track request.id) {

@@ -5,12 +5,13 @@ import { Request } from '../../models/request.model';
 import { DatePipe, AsyncPipe } from '@angular/common';
 import { Observable, of } from 'rxjs';
 import { take, map, catchError, shareReplay, finalize, timeout } from 'rxjs/operators';
+import { FormsModule } from '@angular/forms';
 
 import { BookService } from '../../services/book';
 
 @Component({
   selector: 'app-requests',
-  imports: [DatePipe, AsyncPipe, RouterModule],
+  imports: [DatePipe, AsyncPipe, RouterModule, FormsModule],
   templateUrl: './requests.html',
   styleUrl: './requests.css',
 })
@@ -195,6 +196,9 @@ export class Requests implements OnInit {
 
   isLoading = false
 
+  batchRatingGT: number | null = null;
+  batchRatingLT: number | null = null;
+
   ngOnInit(): void {
       const allRequests$ = this.requestService.getMyRequests()
 
@@ -237,7 +241,7 @@ export class Requests implements OnInit {
     ).subscribe();
   }
 
- declineRequest(reqId: number) {
+ declineRequest(reqId: number): void {
     this.isLoading = true
 
     this.requestService.updateRequest(reqId, 'rejected').pipe(
@@ -250,5 +254,37 @@ export class Requests implements OnInit {
             }, 500)
         })
     ).subscribe();
+  }
+
+  batchAccept(): void {
+    if (!this.incomingRequests) return;
+
+    if (this.batchRatingGT) {
+        if (this.batchRatingGT < 0 || this.batchRatingGT > 5) {
+            this.batchRatingGT = 5;
+        };
+    } else {
+        this.batchRatingGT = 0;
+    };
+
+    for (let request of this.incomingRequests) {
+        if (request.requester.rating > this.batchRatingGT) this.acceptRequest(request.id);
+    };
+  }
+
+  batchDecline(): void {
+    if (!this.incomingRequests) return;
+
+    if (this.batchRatingLT) {
+        if (this.batchRatingLT < 0 || this.batchRatingLT > 5) {
+            this.batchRatingLT = 0;
+        };
+    } else {
+        this.batchRatingLT = 5;
+    };
+
+    for (let request of this.incomingRequests) {
+        if (request.requester.rating < this.batchRatingLT) this.declineRequest(request.id);
+    };
   }
 }
