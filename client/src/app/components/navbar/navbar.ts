@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { UserProfile } from '../user-profile/user-profile';
 
 import { Auth } from '../../services/auth';
 
@@ -11,5 +12,14 @@ import { Auth } from '../../services/auth';
   styleUrls: ['./navbar.css'],
 })
 export class Navbar {
-  public authService = inject(Auth)
+  constructor(public authService: Auth, private router: Router) {}
+
+  get myId(): number | null {
+    return this.authService.getUserIdFromToken();
+  }
+
+  logout(): void {
+    this.authService.logout()
+    this.router.navigate(['/login'])
+  }
 }

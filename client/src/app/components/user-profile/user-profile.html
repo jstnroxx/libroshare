@@ -1,0 +1,130 @@
+<div class="profile-container">
+  @if (user) {
+    <section class="profile-header">
+      <div class="avatar-container">
+        <div class="avatar-placeholder">{{ user.name[0] }}</div>
+      </div>
+      
+      <div class="user-info">
+        @if (!isEditing) {
+          <h1>{{ user.name }}</h1>
+          <p class="location">📍 {{ user.location }}</p>
+          <p class="bio">{{ user.bio }}</p>
+        } @else {
+          <div class="edit-form">
+            <input [(ngModel)]="editData.name" placeholder="Name">
+            <input [(ngModel)]="editData.location" placeholder="Location">
+            <textarea [(ngModel)]="editData.bio" placeholder="Bio"></textarea>
+            <div class="edit-actions">
+              <button (click)="saveProfile()" class="save-btn">Save</button>
+              <button (click)="toggleEdit()" class="cancel-btn">Cancel</button>
+            </div>
+          </div>
+        }
+        </div>
+
+      <div class="profile-actions">
+        @if (isMyProfile) {
+          <button class="edit-btn" (click)="toggleEdit()">
+            {{ isEditing ? 'Editing...' : 'Edit Profile' }}
+          </button>
+        } @else {
+          <div class="action-group">
+            <button class="msg-btn">Message Owner</button>
+            <button class="review-btn-outline" (click)="openReview()">Leave a Review</button>
+          </div>
+        }
+      </div>
+
+      @if (showReviewModal) {
+        <div class="modal-overlay">
+          <div class="modal-content">
+            <h3>Write a Review</h3>
+            <select [(ngModel)]="newReview.rating">
+              <option [value]="5">★★★★★ (Excellent)</option>
+              <option [value]="4">★★★★☆ (Good)</option>
+              <option [value]="3">★★★☆☆ (Average)</option>
+              <option [value]="2">★★☆☆☆ (Poor)</option>
+              <option [value]="1">★☆☆☆☆ (Terrible)</option>
+            </select>
+            <textarea [(ngModel)]="newReview.comment" placeholder="Share your experience..."></textarea>
+            <div class="modal-actions">
+              <button class="msg-btn" (click)="submitReview()">Submit</button>
+              <button class="cancel-btn" (click)="closeReview()">Close</button>
+            </div>
+          </div>
+        </div>
+      }
+    </section>
+
+    <section class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-value">{{ user.stats.given }}</span>
+        <span class="stat-label">Books Shared</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value">{{ user.stats.borrowed }}</span>
+        <span class="stat-label">Books Borrowed</span>
+      </div>
+    </section>
+
+    <section class="user-library">
+      <h2 class="section-title">Shelves</h2>
+      
+      <div class="books-grid">
+        @for (book of userBooks; track book.id) {
+          <div class="book-item">
+            <div class="book-cover-mini">
+              <img [src]="book.cover" [alt]="book.title">
+            </div>
+            <div class="book-details-mini">
+              <h3>{{ book.title }}</h3>
+              <p>{{ book.author }}</p>
+              
+              @for (inst of book.instances; track inst.id) {
+                @if (inst.ownerId === +userId!) {
+                  <span class="condition-tag">{{ inst.condition }}</span>
+                }
+              }
+            </div>
+            
+            @if (!isMyProfile) {
+              <button class="request-btn-mini">Request Borrow</button>
+            }
+          </div>
+        } @empty {
+          <p class="empty-msg">This library is currently empty.</p>
+        }
+      </div>
+    </section>
+
+    <section class="user-reviews">
+      <h2 class="section-title">Reader Reviews</h2>
+
+      <div class="reviews-container">
+        @for (review of user.reviews; track review.id) {
+          <div class="review-card">
+            <div class="review-header">
+              <span class="reviewer-name">{{ review.author }}</span>
+              <span class="review-date">{{ review.date }}</span>
+            </div>
+            <div class="review-stars">
+              {{ "★".repeat(review.rating) }}{{ "☆".repeat(5 - review.rating) }}
+            </div>
+            <p class="review-text">"{{ review.comment }}"</p>
+          </div>
+        } @empty {
+          <div class="empty-reviews">
+             <p class="empty-msg">No reviews yet.</p>
+          </div>
+        }
+      </div>
+    </section>
+
+  } @else {
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Loading the profile...</p>
+    </div>
+  }
+</div>
