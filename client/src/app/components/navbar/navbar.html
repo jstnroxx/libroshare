@@ -14,7 +14,7 @@
   </div>
 
   <div class="user-actions">
-    <a routerLink="/profile" class="profile-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Profile</a>
+    <a [routerLink]="['/profile', myId]" class="profile-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Profile</a>
     <button class="logout-btn">Logout</button>
   </div>
 </nav>
