@@ -20,6 +20,10 @@
       <button class="signin-btn" [disabled]="isSubmitting || username === '' || password === ''" (click)="login()">{{isSubmitting ? 'Signing in...' : 'Sign in'}}</button>
       <br>
       <p class="register-hint" (click)="toggleMode()">Not a user yet? <span style="text-decoration: underline">Register</span></p>
+    }
+
+    @if (errorMsg()) {
+        <p class="error-msg">{{ errorMsg() }}</p>
     }  
   </div>
 </div>
