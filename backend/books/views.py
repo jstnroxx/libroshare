@@ -6,6 +6,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from .models import Book, Request, Profile, Review
 from .serializers import (
@@ -19,7 +20,7 @@ from .serializers import (
 
 
 class BookListCreateAPIView(APIView):
-
+    permission_classes = [IsAuthenticatedOrReadOnly]
     def get_permissions(self):
         if self.request.method == "POST":
             return [IsAuthenticated()]
@@ -39,7 +40,7 @@ class BookListCreateAPIView(APIView):
 
 
 class BookDetailAPIView(APIView):
-
+    permission_classes = [IsAuthenticatedOrReadOnly]
     def get(self, request, id):
         book = get_object_or_404(Book, id=id)
         return Response(BookSerializer(book).data)
@@ -106,10 +107,13 @@ class RequestActionAPIView(APIView):
 
 
 class ProfileAPIView(APIView):
-    permission_classes = [IsAuthenticated]
 
-    def get(self, request):
-        profile, _ = Profile.objects.get_or_create(user=request.user)
+    def get(self, request, id=None):
+        if id:
+            profile = get_object_or_404(Profile, user_id=id)
+        else:
+            profile = request.user.profile
+
         return Response(ProfileSerializer(profile).data)
 
 
