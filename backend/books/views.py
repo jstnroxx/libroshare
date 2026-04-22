@@ -1,137 +1,101 @@
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
-
 from rest_framework.views import APIView
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-from .models import Book, Request, Profile, Review
-from .serializers import (
-    BookSerializer,
-    RequestSerializer,
-    ProfileSerializer,
-    RegisterSerializer,
-    ReviewSerializer,
-    ReviewCreateSerializer
-)
-
+from .models import Book, BookOffer, Request, Profile, Review, UserReview
+from .serializers import *
 
 class BookListCreateAPIView(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
-    def get_permissions(self):
-        if self.request.method == "POST":
-            return [IsAuthenticated()]
-        return [AllowAny()]
-
+    
     def get(self, request):
         books = Book.objects.all()
         return Response(BookSerializer(books, many=True).data)
 
     def post(self, request):
-        permission_classes = [AllowAny]
         serializer = BookSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(owner=request.user)
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
-
+            book = serializer.save()
+        
+        # Исправляем тут:
+            BookOffer.objects.create(
+                book=book,
+                owner=request.user,
+                condition=request.data.get("condition", "New") 
+        )
+            return Response(BookSerializer(book).data, status=201)
 
 class BookDetailAPIView(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
+    
     def get(self, request, id):
         book = get_object_or_404(Book, id=id)
         return Response(BookSerializer(book).data)
 
     def put(self, request, id):
-        book = get_object_or_404(Book, id=id, owner=request.user)
-        serializer = BookSerializer(book, data=request.data)
-
+        book = get_object_or_404(Book, id=id)
+        if not BookOffer.objects.filter(book=book, owner=request.user).exists():
+            return Response({"error": "Forbidden"}, status=403)
+        serializer = BookSerializer(book, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-
         return Response(serializer.errors, status=400)
-
-    def delete(self, request, id):
-        book = get_object_or_404(Book, id=id, owner=request.user)
-        book.delete()
-        return Response(status=204)
-
-
 
 class RequestAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         return Response({
-            "incoming": RequestSerializer(
-                Request.objects.filter(book__owner=request.user),
-                many=True
-            ).data,
-            "outgoing": RequestSerializer(
-                Request.objects.filter(requester=request.user),
-                many=True
-            ).data
+            "incoming": RequestSerializer(Request.objects.filter(offer__owner=request.user), many=True).data,
+            "outgoing": RequestSerializer(Request.objects.filter(requester=request.user), many=True).data
         })
 
     def post(self, request):
         serializer = RequestSerializer(data=request.data)
-
         if serializer.is_valid():
             serializer.save(requester=request.user)
             return Response(serializer.data, status=201)
-
         return Response(serializer.errors, status=400)
-
 
 class RequestActionAPIView(APIView):
     permission_classes = [IsAuthenticated] 
 
     def patch(self, request, id):
         req = get_object_or_404(Request, id=id)
-        if req.book.owner != request.user:
+        if req.offer.owner != request.user:
             return Response({"error": "Forbidden"}, status=403)
 
         status_value = request.data.get("status")
-        if status_value not in ["approved", "rejected"]:
-            return Response({"error": "Invalid status"}, status=400)
-
-        req.status = status_value
-        req.save()
-
-        return Response({"message": "updated"})
-
-
+        if status_value in ["approved", "rejected"]:
+            req.status = status_value
+            req.save()
+            return Response({"message": "updated"})
+        return Response({"error": "Invalid status"}, status=400)
 
 class ProfileAPIView(APIView):
-
     def get(self, request, id=None):
         if id:
             profile = get_object_or_404(Profile, user_id=id)
         else:
             profile = request.user.profile
-
         return Response(ProfileSerializer(profile).data)
 
-
-
 class RegisterAPIView(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
-
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=201)
-
         return Response(serializer.errors, status=400)
-
 
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
-
     def post(self, request):
         try:
             token = RefreshToken(request.data["refresh"])
@@ -141,49 +105,47 @@ class LogoutView(APIView):
             return Response({"error": "invalid token"}, status=400)
 
 
-
 class ReviewAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get(self, request):
+        # Получаем все отзывы на книги (BookOffer)
         reviews = Review.objects.all()
-        return Response(ReviewSerializer(reviews, many=True).data)
+        return Response(BookReviewSerializer(reviews, many=True).data)
 
     def post(self, request):
+        # Используем специальный сериализатор для создания отзыва
         serializer = ReviewCreateSerializer(data=request.data)
 
         if serializer.is_valid():
-            book = get_object_or_404(Book, id=serializer.validated_data["book_id"])
+            # Находим конкретное предложение (экземпляр) книги по ID
+            offer = get_object_or_404(BookOffer, id=serializer.validated_data["offer_id"])
 
+            # Создаем отзыв в базе
             Review.objects.create(
-                book=book,
+                offer=offer,
                 reviewer=request.user,
                 rating=serializer.validated_data["rating"],
                 comment=serializer.validated_data["comment"]
             )
 
-            return Response({"message": "created"}, status=201)
+            return Response({"message": "Review created successfully"}, status=201)
 
         return Response(serializer.errors, status=400)
-    
-    
 @api_view(['GET'])
 def book_stats(request):
     return Response({
         "total_books": Book.objects.count(),
-        "available_books": Book.objects.filter(available=True).count(),
+        "available_books": BookOffer.objects.filter(is_available=True).count(),
         "users": User.objects.count()
     })
 
-
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def user_dashboard(request):
-    if not request.user.is_authenticated:
-        return Response({"error": "Not authenticated"}, status=401)
-
     return Response({
         "username": request.user.username,
-        "my_books": Book.objects.filter(owner=request.user).count(),
+        "my_books": BookOffer.objects.filter(owner=request.user).count(),
         "sent_requests": Request.objects.filter(requester=request.user).count(),
-        "incoming_requests": Request.objects.filter(book__owner=request.user).count()
+        "incoming_requests": Request.objects.filter(offer__owner=request.user).count()
     })
