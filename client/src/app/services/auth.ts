@@ -1,71 +1,71 @@
 import { Injectable, inject, signal, WritableSignal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { Observable, tap, of } from 'rxjs'; // Добавил of для обработки ошибок
 
 @Injectable({
   providedIn: 'root',
 })
-
 export class Auth {
-  isAuthenticated: WritableSignal<boolean> = signal(localStorage.getItem('refresh_token') ? true : false);
+  isAuthenticated: WritableSignal<boolean> = signal(!!localStorage.getItem('access_token'));
 
   private API_URL = 'http://localhost:8000/api';
-  private http = inject(HttpClient)
+  private http = inject(HttpClient);
+
+  get currentUserId(): number | null {
+    return this.getUserIdFromToken();
+  }
 
   setTokens(access: string, refresh: string) {
     localStorage.setItem('access_token', access);
     localStorage.setItem('refresh_token', refresh);
+    this.isAuthenticated.set(true); 
   }
 
-  getAccessToken(): string | null {
-    return localStorage.getItem('access_token');
-  }
+  getAccessToken() { return localStorage.getItem('access_token'); }
+  getRefreshToken() { return localStorage.getItem('refresh_token'); }
 
-  getRefreshToken(): string | null {
-    return localStorage.getItem('refresh_token');
+  getUserIdFromToken(): number | null {
+    const token = this.getAccessToken();
+    if (!token) return null;
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const payload = JSON.parse(atob(base64)); 
+      return payload.user_id || payload.sub || null;
+    } catch (e) {
+      return null;
+    }
   }
 
   logout() {
-    this.http.post(`${this.API_URL}/logout/`, {
-      refresh: this.getRefreshToken()
-    }).subscribe();
-
+    const refresh = this.getRefreshToken();
+    if (refresh) {
+      this.http.post(`${this.API_URL}/logout/`, { refresh }).subscribe();
+    }
+    
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
-
-    this.isAuthenticated.set(false)
+    this.isAuthenticated.set(false);
   }
 
-  login(_username: string, _password: string): Observable<any> {
-    return this.http.post(`${this.API_URL}/login/`, {
-      username: _username,
-      password: _password
-    }).pipe(
-      tap((response: any) => {
-        this.setTokens(response.access, response.refresh);
-        this.isAuthenticated.set(true);
-      })
+  login(username: string, password: string): Observable<any> {
+    return this.http.post(`${this.API_URL}/login/`, { username, password }).pipe(
+      tap((res: any) => this.setTokens(res.access, res.refresh))
     );
   }
 
-  register(_username: string, _password: string): Observable<any> {
-    return this.http.post(`${this.API_URL}/register/`, {
-      username: _username,
-      password: _password
-    }).pipe(
-      tap((response: any) => {
-        this.login(_username, _password).subscribe();
-      })
+  register(username: string, password: string): Observable<any> {
+    return this.http.post(`${this.API_URL}/register/`, { username, password }).pipe(
+      tap((res: any) => this.setTokens(res.access, res.refresh))
     );
   }
 
   refreshToken(): Observable<any> {
-    return this.http.post(`${this.API_URL}/refresh/`, {
-      refresh: this.getRefreshToken()
-    }).pipe(
-      tap((response: any) => {
-        this.setTokens(response.access, this.getRefreshToken()!)
-      })
-    )
+    const refresh = this.getRefreshToken();
+    if (!refresh) return of(null);
+
+    return this.http.post(`${this.API_URL}/refresh/`, { refresh }).pipe(
+      tap((res: any) => this.setTokens(res.access, refresh))
+    );
   }
 }

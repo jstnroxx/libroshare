@@ -12,9 +12,11 @@ import { Auth } from '../../services/auth';
   styleUrls: ['./navbar.css'],
 })
 export class Navbar {
-  public authService = inject(Auth)
-  
-  private router = inject(Router)
+  constructor(public authService: Auth, private router: Router) {}
+
+  get myId(): number | null {
+    return this.authService.getUserIdFromToken();
+  }
 
   logout(): void {
     this.authService.logout()

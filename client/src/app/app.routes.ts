@@ -4,7 +4,6 @@ import { Login } from './components/login/login';
 import { BookList } from './components/book-list/book-list';
 import { BookDetails } from './components/book-details/book-details';
 import { MyBooks } from './components/my-books/my-books';
-import { UserProfile } from './components/user-profile/user-profile';
 
 import { guestGuard } from './guest-guard';
 import { authGuard } from './auth-guard';

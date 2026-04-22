@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { UserService } from '../../services/user';
-import { AuthService } from '../../services/auth';
+import { Auth } from '../../services/auth';
 import { BookService } from '../../services/book';
 import { ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { UserService } from '../../services/user';
 
 @Component({
   selector: 'app-user-profile',
-  imports: [FormsModule],
+  standalone: true,
+  imports: [FormsModule, CommonModule],
   templateUrl: './user-profile.html',
   styleUrls: ['./user-profile.css']
 })
@@ -26,7 +28,7 @@ export class UserProfile implements OnInit {
   constructor(
   private route: ActivatedRoute,
   private userService: UserService,
-  private authService: AuthService,
+  private authService: Auth,
   private bookService: BookService,
   private cdr: ChangeDetectorRef
 ) {}
@@ -39,10 +41,19 @@ export class UserProfile implements OnInit {
   }
 
   saveProfile() {
-    this.user = { ...this.user, ...this.editData };
-    this.isEditing = false;
-    // Здесь обычно идет вызов к сервису: this.userService.updateUser(this.user).subscribe();
-    this.cdr.detectChanges();
+    const updatedUser = { ...this.user, ...this.editData };
+    this.userService.updateUser(updatedUser).subscribe({
+      next: (res: any) => {
+        this.user = res; 
+        this.isEditing = false;
+        this.cdr.detectChanges();
+        console.log('Profile updated successfully!');
+      },
+      error: (err: any) => {
+        console.error('Failed to update profile', err);
+        alert('Could not save changes. Please try again.');
+      }
+    });
   }
 
   openReview() {
@@ -56,7 +67,7 @@ export class UserProfile implements OnInit {
   submitReview() {
     const review = {
       id: Date.now(),
-      author: 'You', // В реальности берем из AuthService
+      author: `User${this.authService.currentUserId}`,
       rating: this.newReview.rating,
       comment: this.newReview.comment,
       date: new Date().toLocaleDateString()
@@ -68,27 +79,44 @@ export class UserProfile implements OnInit {
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
-      this.userId = params.get('id'); 
-      const idNum = Number(this.userId); 
-      
+      const idFromUrl = params.get('id');
+      if (!idFromUrl) return;
+
+      const idNum = Number(idFromUrl);
+      const myId = Number(this.authService.getUserIdFromToken());
+
+      this.isMyProfile = (idNum === myId);
       this.user = null;
-      this.userBooks = []; 
+      this.userBooks = [];
 
-      if (idNum) {
-        this.isMyProfile = idNum === this.authService.getCurrentUserId();
+      const profileRequest = this.isMyProfile 
+        ? this.userService.getMyProfile() 
+        : this.userService.getUserById(idNum);
 
-        this.userService.getUserById(idNum).subscribe(data => {
+      profileRequest.subscribe({
+        next: (data) => {
           this.user = data;
-          this.cdr.detectChanges(); 
-        });
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          console.warn('Profile data not found on backend. Using fallback.');
+          this.user = { 
+            name: this.isMyProfile ? 'Your Name' : 'Member', 
+            bio: 'No information available yet.',
+            location: 'Not specified'
+          };
+          this.cdr.detectChanges();
+        }
+      });
 
-        this.bookService.getBooks().subscribe(allBooks => {
+      this.bookService.getBooks().subscribe({
+        next: (allBooks) => {
           this.userBooks = allBooks.filter(book => 
             book.instances.some(inst => inst.ownerId === idNum)
           );
-          this.cdr.detectChanges(); 
-        });
-      }
+          this.cdr.detectChanges();
+        }
+      });
     });
   }
 }
