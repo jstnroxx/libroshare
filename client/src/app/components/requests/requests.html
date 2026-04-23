@@ -1,0 +1,118 @@
+<div class="request-container">
+  <h1>My requests</h1>
+
+  <section class="request-section">
+    <h2>Incoming</h2>
+    
+    <div class="batch-flex">
+        <div style="display: flex; gap: 15px;">
+            <div>
+                <button class="batch-btn" [disabled]="isLoading" (click)="batchAccept()">Accept all</button><br><br>
+                <input class="vintage-input" placeholder="requester rating >..." type="number" min="0" max="5" step="0.1" [(ngModel)]="batchRatingGT">
+            </div>
+
+            <div>
+                <button class="batch-btn" [disabled]="isLoading" (click)="batchDecline()">Decline all</button><br><br>
+                <input class="vintage-input" placeholder="requester rating <..." type="number" min="0" max="5" step="0.1" [(ngModel)]="batchRatingLT">
+            </div>
+        </div>
+    </div>
+
+    <div class="request-grid">
+      @if (incomingRequests !== null) {
+        @for (request of incomingRequests; track request.id) {
+          <div class="request-item" [style.opacity]="request.status === 'pending' ? 1 : 0.5">
+            <a class="book-title" 
+            routerLink="/books/{{ request.bookInstance.id }}" 
+            routerLinkActive="active" 
+            [routerLinkActiveOptions]="{exact: true}">
+                {{ getBookNameById$(request.bookInstance.id) | async }}
+            </a>
+
+            <hr style="margin: 10px 0 0 0">
+
+            <div class="flexbox">
+                <a class="user-name" routerLink="/profile/{{ request.requester.id }}" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">{{ request.requester.name }}</a>
+                <p>&#11088; {{ request.requester.rating }}</p>
+            </div>
+
+            <hr style="margin: 0 0 10px 0">
+
+            <p class="for-days">for <span style="text-decoration: underline">{{ request.for_days }}</span> days</p>
+
+            <p [class.pending-badge]="request.status === 'pending'" 
+            [class.approved-badge]="request.status === 'approved'" 
+            [class.rejected-badge]="request.status === 'rejected'">
+                {{ request.status }}
+            </p>
+
+            <p>{{ request.created_at | date: 'medium' }}</p>
+            <hr style="margin: 0 0 10px 0">
+
+            @if (request.status === 'pending') {
+                <div class="respond-btns">
+                    <button class="accept-btn" (click)="acceptRequest(request.id)" [disabled]="isLoading">Accept</button>
+                    <button class="decline-btn" (click)="declineRequest(request.id)" [disabled]="isLoading">Decline</button>
+                </div>
+            } @else {
+                <p class="resolved-at" [style.color]="request.status === 'approved' ? 'green' : 'rgb(255, 90, 90)'">Resolved at {{ request.resolved_at | date: 'short' }}</p>
+            }
+          </div>
+        } @empty {
+          <div class="empty-msg">You didn't get any requests yet.</div>
+        }
+      } @else {
+        <div class="empty-msg">Loading your requests...</div>
+      }
+    </div>
+  </section>
+
+  <hr>
+
+  <section class="request-section">
+    <h2>Outgoing</h2>
+    
+    <div class="request-grid">
+      @if (outgoingRequests !== null) {
+        @for (request of outgoingRequests; track request.id) {
+          <div class="request-item" [style.opacity]="request.status === 'pending' ? 1 : 0.5">
+            <a class="book-title" 
+            routerLink="/books/{{ request.bookInstance.id }}" 
+            routerLinkActive="active" 
+            [routerLinkActiveOptions]="{exact: true}">
+                {{ getBookNameById$(request.bookInstance.id) | async }}
+            </a>
+
+            <hr style="margin: 10px 0 0 0">
+
+            <div class="flexbox">
+                <a class="user-name" routerLink="/profile/{{ request.requester.id }}" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">{{ request.requester.name }}</a>
+                <p>&#11088; {{ request.requester.rating }}</p>
+            </div>
+
+            <hr style="margin: 0 0 10px 0">
+
+            <p class="for-days">for <span style="text-decoration: underline">{{ request.for_days }}</span> days</p>
+
+            <p [class.pending-badge]="request.status === 'pending'" 
+            [class.approved-badge]="request.status === 'approved'" 
+            [class.rejected-badge]="request.status === 'rejected'">
+                {{ request.status }}
+            </p>
+
+            <p>{{ request.created_at | date: 'medium' }}</p>
+            <hr style="margin: 0 0 10px 0">
+
+            @if (!(request.status === 'pending')) {
+                <p class="resolved-at" [style.color]="request.status === 'approved' ? 'green' : 'rgb(255, 90, 90)'">Resolved at {{ request.resolved_at | date: 'short' }}</p>
+            }
+          </div>
+        } @empty {
+          <div class="empty-msg">You didn't send any requests yet.</div>
+        }
+      } @else {
+        <div class="empty-msg">Loading your requests...</div>
+      }
+    </div>
+  </section>
+</div>
