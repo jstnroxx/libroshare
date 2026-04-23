@@ -25,11 +25,11 @@ export interface BookInstance {
   ownerRating: number; 
   borrowerId?: number;
   borrowerName?: string;
-
+  status: string;
   condition: string;
   realPhotos: string[];
   instanceReviews: BookReview[];
-
+  total_lends: number;
   isAvailable: boolean;
   currentBorrowerId?: number; 
   nextAvailableDate?: Date; 
