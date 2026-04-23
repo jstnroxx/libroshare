@@ -22,7 +22,8 @@ export class AddBook implements OnInit {
     title: '',
     author: '',
     description: '',
-    genre: ''
+    genre: '',
+    year: null
   };
 
   constructor(
@@ -61,10 +62,19 @@ export class AddBook implements OnInit {
 
   addExistingBook() {
     if (this.selectedBook) {
-      const instanceData = { book_id: this.selectedBook.id };
+      const instanceData = { 
+        book_id: this.selectedBook.id, 
+        condition: 'Good'        
+      };
+
       this.bookService.addInstance(instanceData).subscribe({
-        next: () => this.router.navigate(['/my-books']),
-        error: (err) => console.error(err)
+        next: (response) => {
+          console.log('Success:', response.message);
+          this.router.navigate(['/my-books']);
+        },
+        error: (err) => {
+          console.error('Backend error:', err.error);
+        }
       });
     }
   }
