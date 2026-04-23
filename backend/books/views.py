@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
+from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -123,6 +124,7 @@ class RequestActionAPIView(APIView):
             return Response({"error": "Forbidden"}, status=403)
         status_value = request.data.get("status")
         if status_value in ["approved", "rejected"]:
+            req.resolved_at = timezone.now()
             req.status = status_value
             req.save()
             # If approved, mark offer as unavailable
