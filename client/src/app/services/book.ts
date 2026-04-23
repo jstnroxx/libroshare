@@ -22,7 +22,7 @@ export class BookService {
   }
 
   addInstance(instanceData: any): Observable<any> {
-    return this.http.post('http://localhost:8000/api/requests/', instanceData);
+    return this.http.post('http://localhost:8000/api/add-instance/', instanceData);
   }
 
   getBookById(id: number): Observable<Book> {

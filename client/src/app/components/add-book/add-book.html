@@ -7,7 +7,7 @@
     </div>
 
     <div class="input-group search-container">
-      <label>Search by Title or Author</label>
+      <label class = "search-label">Search by Title or Author</label>
       <div class="search-wrapper">
         <input 
           type="text" 
@@ -52,6 +52,10 @@
           <div class="input-group">
             <label>Author Name*</label>
             <input type="text" [(ngModel)]="newBook.author" placeholder="John Doe" class="vintage-input">
+          </div>
+          <div class="input-group">
+            <label>Year of Release*</label>
+            <input type="number" [(ngModel)]="newBook.year" placeholder="1925" class="vintage-input">
           </div>
           <div class="input-group">
             <label>Genre</label>
