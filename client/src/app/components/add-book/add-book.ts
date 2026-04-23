@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BookService } from '../../services/book';  
 import { Router } from '@angular/router';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-add-book',
@@ -79,10 +80,21 @@ export class AddBook implements OnInit {
   }
 
   addNewBook() {
-    const finalBook = { ...this.newBook, title: this.searchTerm };
-    this.bookService.addBook(finalBook).subscribe({
-      next: () => this.router.navigate(['/my-books']),
-      error: (err) => console.error(err)
-    });
-  }
+  const finalBook = { 
+    ...this.newBook, 
+    title: this.searchTerm,
+    condition: 'Good' 
+  };
+
+  this.bookService.addBook(finalBook).subscribe({
+    next: (createdBook) => {
+      console.log('Книга и оффер созданы одной командой в Django!', createdBook);
+      this.router.navigate(['/my-books']);
+    },
+    error: (err) => {
+      console.error('Ошибка:', err);
+      alert('Ошибка при создании книги.');
+    }
+  });
+}
 }

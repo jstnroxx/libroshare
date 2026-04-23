@@ -1,107 +1,76 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
-import { Book } from '../../models/book.model';
-import { RouterLink } from '@angular/router';
-import { BookService } from '../../services/book';
-import { BookInstance } from '../../models/book.model';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { CommonModule, Location } from '@angular/common';
+import { ActivatedRoute, RouterLink, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Location } from '@angular/common';
+import { Book, BookInstance } from '../../models/book.model';
+import { BookService } from '../../services/book';
 
 @Component({
   selector: 'app-book-details',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
-  templateUrl: './book-details.html', 
-  styleUrls: ['./book-details.css']    
+  imports: [CommonModule, RouterLink, RouterModule, FormsModule],
+  templateUrl: './book-details.html',
+  styleUrls: ['./book-details.css']
 })
 export class BookDetails implements OnInit {
-  currentUserId = 1;
-  book!: Book | undefined;
-
-  similarBooks: Book[] = [];
-
-  isModalOpen = false;
+  book: Book | null = null;
+  isLoading = true;
+  similarBooks: Book[] = []; // Array for similar books
+  
   selectedInstance: BookInstance | null = null;
-
-  isImagePreviewOpen = false;
-  selectedImage: string | null = null;
-
-  reviewRating: number = 0;
-  reviewText: string = ''; 
-  isSubmitting: boolean = false;
+  isModalOpen = false;
 
   constructor(
     private route: ActivatedRoute,
     private bookService: BookService,
-    private location: Location
+    private location: Location,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      const id = +params['id'];
-      
-      this.bookService.getBookById(id).subscribe(book => {
-        this.book = book;
-        
-        if (book) {
-          this.bookService.getSimilarBooks(book.genre).subscribe(similar => {
-            this.similarBooks = similar;
-            
-            window.scrollTo(0, 0);
-          });
-        }
-      });
+    this.route.paramMap.subscribe(params => {
+      const id = Number(params.get('id'));
+      if (id) {
+        this.loadBookData(id);
+      }
     });
   }
 
-  closeModal() {
-    this.isModalOpen = false;
-    this.selectedInstance = null;
+  loadBookData(id: number): void {
+    this.isLoading = true;
+    this.similarBooks = []; // Reset list
+
+    this.bookService.getBookById(id).subscribe({
+      next: (data) => {
+        this.book = data;
+        this.isLoading = false;
+        
+        // FETCH SIMILAR BOOKS LOGIC
+        if (data.genre) {
+          this.bookService.getSimilarBooks(data.genre).subscribe({
+            next: (list) => {
+              // Filter out the current book so it doesn't recommend itself
+              this.similarBooks = list.filter(b => b.id !== id).slice(0, 4);
+              this.cdr.detectChanges();
+            }
+          });
+        }
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error:', err);
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      }
+    });
   }
 
-  openRequestModal(instance: BookInstance) {
+  openRequestModal(instance: BookInstance): void {
     this.selectedInstance = instance;
     this.isModalOpen = true;
   }
 
-  openImagePreview(photo: string) {
-    this.selectedImage = photo;
-    this.isImagePreviewOpen = true;
-  }
-
-  closeImagePreview() {
-    this.isImagePreviewOpen = false;
-    this.selectedImage = null;
-  }
-
-  manageInstance(instance: BookInstance) {
-    console.log('Managing my copy:', instance.id);
-  }
-
-  setRating(value: number) {
-    this.reviewRating = value;
-  }
-
-  sendReview() {
-    if (!this.reviewText.trim() || this.reviewRating === 0) return;
-    
-    this.isSubmitting = true;
-
-    setTimeout(() => {
-      console.log('Review successfully saved to database');
-      
-      this.isSubmitting = false;
-      this.reviewText = '';
-      this.reviewRating = 0;
-      
-      this.closeModal(); 
-      
-      alert('Thank you! Your review has been submitted.');
-    }, 1000);
-  }
-
-  goBack() {
+  goBack(): void {
     this.location.back();
   }
 }
