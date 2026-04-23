@@ -39,14 +39,16 @@ class Review(models.Model):
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+
 class Request(models.Model):
     STATUS_CHOICES = [('pending', 'Pending'), ('approved', 'Approved'), ('rejected', 'Rejected')]
     offer = models.ForeignKey(BookOffer, on_delete=models.CASCADE, related_name="requests")
     requester = models.ForeignKey(User, on_delete=models.CASCADE)
-    for_days = models.IntegerField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    for_days = models.IntegerField(default=14)
     created_at = models.DateTimeField(auto_now_add=True)
-    resolved_at = models.DateTimeField(blank=True)
+    resolved_at = models.DateTimeField(null=True, blank=True)
+
 
 class UserReview(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_reviews")

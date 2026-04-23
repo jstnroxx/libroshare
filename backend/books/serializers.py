@@ -83,13 +83,43 @@ class ProfileSerializer(serializers.ModelSerializer):
     def get_reviews(self, obj):
         return UserReviewSerializer(obj.user.user_reviews.all(), many=True).data
 
+# Замени класс RequestSerializer в serializers.py на этот:
+
+class RequesterSerializer(serializers.ModelSerializer):
+    rating = serializers.FloatField(source='profile.rating', read_only=True)
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'rating']
+
+
+# serializers.py — замени RequestSerializer на этот
+
+class RequesterSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source='username', read_only=True)
+    rating = serializers.FloatField(source='profile.rating', read_only=True)
+
+    class Meta:
+        model = User
+        fields = ['id', 'name', 'rating']
+
+
+class BookInstanceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BookOffer
+        fields = ['id']
+
 
 class RequestSerializer(serializers.ModelSerializer):
+    requester = RequesterSerializer(read_only=True)
+    bookInstance = BookInstanceSerializer(source='offer', read_only=True)
+    for_days = serializers.IntegerField(default=14)
+
     class Meta:
         model = Request
-        fields = '__all__'
+        fields = ['id', 'offer', 'bookInstance', 'requester', 'for_days',
+                  'status', 'created_at', 'resolved_at']
         extra_kwargs = {'requester': {'read_only': True}}
-
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:

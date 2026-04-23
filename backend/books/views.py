@@ -6,6 +6,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
+from django.utils import timezone
+
 from .models import Book, BookOffer, Request, Profile, Review, UserReview
 from .serializers import (
     BookSerializer, RequestSerializer, ProfileSerializer,
@@ -114,6 +116,8 @@ class RequestAPIView(APIView):
         return Response(serializer.errors, status=400)
 
 
+
+
 class RequestActionAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -124,8 +128,8 @@ class RequestActionAPIView(APIView):
         status_value = request.data.get("status")
         if status_value in ["approved", "rejected"]:
             req.status = status_value
+            req.resolved_at = timezone.now()
             req.save()
-            # If approved, mark offer as unavailable
             if status_value == "approved":
                 req.offer.is_available = False
                 req.offer.total_lends += 1
