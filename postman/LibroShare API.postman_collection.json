@@ -1,486 +1,848 @@
 {
   "info": {
-    "_postman_id": "61724bda-025f-4176-a276-951223fcca6a",
+    "_postman_id": "27b575e7-cd9c-4e72-b16c-81f7500bf5ca",
     "name": "LibroShare API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "53655507",
-    "_collection_link": "https://go.postman.co/collection/53655507-61724bda-025f-4176-a276-951223fcca6a?source=collection_link"
+    "_exporter_id": "53584312",
+    "_collection_link": "https://go.postman.co/collection/53584312-27b575e7-cd9c-4e72-b16c-81f7500bf5ca?source=collection_link"
   },
   "item": [
     {
-      "name": "Register",
-      "request": {
-        "auth": {
-          "type": "noauth"
-        },
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"username\": \"test\",\r\n  \"password\": \"123456\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "http://127.0.0.1:8000/api/register/",
-          "protocol": "http",
-          "host": [
-            "127",
-            "0",
-            "0",
-            "1"
-          ],
-          "port": "8000",
-          "path": [
-            "api",
-            "register",
-            ""
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Login",
-      "request": {
-        "auth": {
-          "type": "noauth"
-        },
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"username\": \"test\",\r\n  \"password\": \"123456\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "http://127.0.0.1:8000/api/login/",
-          "protocol": "http",
-          "host": [
-            "127",
-            "0",
-            "0",
-            "1"
-          ],
-          "port": "8000",
-          "path": [
-            "api",
-            "login",
-            ""
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "GetAllBooks",
-      "protocolProfileBehavior": {
-        "disableBodyPruning": true
-      },
-      "request": {
-        "auth": {
-          "type": "noauth"
-        },
-        "method": "GET",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"username\": \"test\",\r\n  \"password\": \"123456\"\r\n}"
-        },
-        "url": {
-          "raw": "http://127.0.0.1:8000/api/books/",
-          "protocol": "http",
-          "host": [
-            "127",
-            "0",
-            "0",
-            "1"
-          ],
-          "port": "8000",
-          "path": [
-            "api",
-            "books",
-            ""
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "CreateBook",
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "event": [
             {
-              "key": "token",
-              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2Nzk3Mjg2LCJpYXQiOjE3NzY3OTM2ODYsImp0aSI6IjQ1MzMwMjQ2YmEzZTQyMzViM2I4ZmU3MWFiNjNkNzhiIiwidXNlcl9pZCI6IjMifQ.BDZ5MX67Wkk1JpSncv9YMDha1nzgdbp5kWuTyCOCPAY",
-              "type": "string"
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();\r",
+                  "\r",
+                  "if (json.access) pm.collectionVariables.set('ACCESS_TOKEN', json.access);\r",
+                  "if (json.refresh) pm.collectionVariables.set('REFRESH_TOKEN', json.refresh);\r",
+                  "\r",
+                  "if (json.username) pm.collectionVariables.set('USERNAME', json.username);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
             }
-          ]
-        },
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"title\": \"Harry Potter\",\r\n  \"author\": \"Rowling\",\r\n  \"description\": \"Magic book\",\r\n  \"year\": 2000,\r\n  \"condition\": \"new\",\r\n  \"genre\": \"fantasy\",\r\n  \"cover\": \"https://img.com/1.jpg\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "http://127.0.0.1:8000/api/books/",
-          "protocol": "http",
-          "host": [
-            "127",
-            "0",
-            "0",
-            "1"
           ],
-          "port": "8000",
-          "path": [
-            "api",
-            "books",
-            ""
-          ]
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"username\": \"{{USERNAME}}\",\r\n  \"password\": \"{{PASSWORD}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/register/",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "register",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();\r",
+                  "\r",
+                  "if (json.access) pm.collectionVariables.set('ACCESS_TOKEN', json.access);\r",
+                  "if (json.refresh) pm.collectionVariables.set('REFRESH_TOKEN', json.refresh);\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"username\": \"{{USERNAME}}\",\r\n  \"password\": \"{{PASSWORD}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/login/",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "login",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Access Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();\r",
+                  "\r",
+                  "if (json.access) pm.collectionVariables.set('ACCESS_TOKEN', json.access);\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"refresh\": \"{{REFRESH_TOKEN}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/refresh/",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "refresh",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();\r",
+                  "\r",
+                  "if (json.message && json.message === 'logged out') {\r",
+                  "    pm.collectionVariables.unset(\"ACCESS_TOKEN\")\r",
+                  "    pm.collectionVariables.unset(\"REFRESH_TOKEN\")\r",
+                  "};\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"refresh\": \"{{REFRESH_TOKEN}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/logout/",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "logout",
+                ""
+              ]
+            }
+          },
+          "response": []
         }
-      },
-      "response": []
+      ]
     },
     {
-      "name": "GetById",
-      "protocolProfileBehavior": {
-        "disableBodyPruning": true
-      },
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
+      "name": "Books",
+      "item": [
+        {
+          "name": "Get All Books",
+          "event": [
             {
-              "key": "token",
-              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2Nzk3Mjg2LCJpYXQiOjE3NzY3OTM2ODYsImp0aSI6IjQ1MzMwMjQ2YmEzZTQyMzViM2I4ZmU3MWFiNjNkNzhiIiwidXNlcl9pZCI6IjMifQ.BDZ5MX67Wkk1JpSncv9YMDha1nzgdbp5kWuTyCOCPAY",
-              "type": "string"
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();\r",
+                  "\r",
+                  "if (json[0].instances && json[0].instances[0] && json[0].instances[0].id) pm.collectionVariables.set('SOME_BOOK_INSTANCE_ID', json[0].instances[0].id);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
             }
-          ]
-        },
-        "method": "GET",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"title\": \"Harry Potter\",\r\n  \"author\": \"Rowling\",\r\n  \"description\": \"Magic book\",\r\n  \"year\": 2000,\r\n  \"condition\": \"new\",\r\n  \"genre\": \"fantasy\",\r\n  \"cover\": \"https://img.com/1.jpg\"\r\n}"
-        },
-        "url": {
-          "raw": "http://127.0.0.1:8000/api/books/1",
-          "protocol": "http",
-          "host": [
-            "127",
-            "0",
-            "0",
-            "1"
           ],
-          "port": "8000",
-          "path": [
-            "api",
-            "books",
-            "1"
-          ]
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/books/",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "books",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add New Book",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();\r",
+                  "\r",
+                  "if (json.id) pm.collectionVariables.set('SOME_BOOK_ID', json.id);\r",
+                  "if (json.genre) pm.collectionVariables.set('SOME_BOOK_GENRE', json.genre);\r",
+                  "if (json.instances && json.instances[0] && json.instances[0].id) pm.collectionVariables.set('SOME_BOOK_INSTANCE_ID', json.instances[0].id);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\": \"{{NEW_BOOK_TITLE}}\",\r\n    \"author\": \"{{NEW_BOOK_AUTHOR}}\",\r\n    \"description\": \"{{NEW_BOOK_DESCRIPTION}}\",\r\n    \"year\": {{NEW_BOOK_YEAR}},\r\n    \"genre\": \"test\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/books/",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "books",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Book Info By ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();\r",
+                  "\r",
+                  "if (json.instances && json.instances[0] && json.instances[0].id) pm.collectionVariables.set('SOME_BOOK_INSTANCE_ID', json.instances[0].id);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/books/{{SOME_BOOK_ID}}/",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "books",
+                "{{SOME_BOOK_ID}}",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Edit Book Info By ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();\r",
+                  "\r",
+                  "if (json.genre) pm.collectionVariables.set('SOME_BOOK_GENRE', json.genre);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\": \"Updated book title.\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/books/{{SOME_BOOK_ID}}/",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "books",
+                "{{SOME_BOOK_ID}}",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Similar Books",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/books/similar/?genre={{SOME_BOOK_GENRE}}",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "books",
+                "similar",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "genre",
+                  "value": "{{SOME_BOOK_GENRE}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add Book Instance",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"book_id\": {{SOME_BOOK_ID}}\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/add-instance/",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "add-instance",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Books",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"title\": \"{{NEW_BOOK_TITLE}}\",\r\n    \"author\": \"{{NEW_BOOK_AUTHOR}}\",\r\n    \"description\": \"{{NEW_BOOK_DESCRIPTION}}\",\r\n    \"year\": {{NEW_BOOK_YEAR}},\r\n    \"genre\": \"test\"\r\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/my-shelf/",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "my-shelf",
+                ""
+              ]
+            }
+          },
+          "response": []
         }
-      },
-      "response": []
+      ]
     },
     {
-      "name": "DeleteBook",
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
+      "name": "Requests",
+      "item": [
+        {
+          "name": "Get My Requests",
+          "event": [
             {
-              "key": "token",
-              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2Nzk3Mjg2LCJpYXQiOjE3NzY3OTM2ODYsImp0aSI6IjQ1MzMwMjQ2YmEzZTQyMzViM2I4ZmU3MWFiNjNkNzhiIiwidXNlcl9pZCI6IjMifQ.BDZ5MX67Wkk1JpSncv9YMDha1nzgdbp5kWuTyCOCPAY",
-              "type": "string"
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();\r",
+                  "\r",
+                  "if (json.incoming[0] && json.incoming[0].id) pm.collectionVariables.set('SOME_REQUEST_ID', json.incoming[0].id);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
             }
-          ]
-        },
-        "method": "DELETE",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "http://127.0.0.1:8000/api/books/1/",
-          "protocol": "http",
-          "host": [
-            "127",
-            "0",
-            "0",
-            "1"
           ],
-          "port": "8000",
-          "path": [
-            "api",
-            "books",
-            "1",
-            ""
-          ]
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/requests/",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "requests",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Send New Request",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();\r",
+                  "\r",
+                  "if (json.id) pm.collectionVariables.set('SOME_REQUEST_ID', json.id);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"for_days\": 3,\r\n    \"offer\": {{SOME_BOOK_INSTANCE_ID}}\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/requests/",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "requests",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Approve Request",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"status\": \"approved\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/requests/action/{{SOME_REQUEST_ID}}/",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "requests",
+                "action",
+                "{{SOME_REQUEST_ID}}",
+                ""
+              ]
+            }
+          },
+          "response": []
         }
-      },
-      "response": []
+      ]
     },
     {
-      "name": "CreateRequest",
-      "protocolProfileBehavior": {
-        "disabledSystemHeaders": {
-          "content-type": true
-        }
-      },
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
+      "name": "Profiles",
+      "item": [
+        {
+          "name": "Edit My Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"location\": \"New test location.\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/profile/",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "profile",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Profile",
+          "event": [
             {
-              "key": "token",
-              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2Nzk3Mjg2LCJpYXQiOjE3NzY3OTM2ODYsImp0aSI6IjQ1MzMwMjQ2YmEzZTQyMzViM2I4ZmU3MWFiNjNkNzhiIiwidXNlcl9pZCI6IjMifQ.BDZ5MX67Wkk1JpSncv9YMDha1nzgdbp5kWuTyCOCPAY",
-              "type": "string"
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const json = pm.response.json();\r",
+                  "\r",
+                  "if (json.id) pm.collectionVariables.set('SOME_PROFILE_ID', json.id);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
             }
-          ]
-        },
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"book\": 1\r\n}",
-          "options": {
-            "raw": {
-              "language": "text"
-            }
-          }
-        },
-        "url": {
-          "raw": "http://127.0.0.1:8000/api/requests/",
-          "protocol": "http",
-          "host": [
-            "127",
-            "0",
-            "0",
-            "1"
           ],
-          "port": "8000",
-          "path": [
-            "api",
-            "requests",
-            ""
-          ]
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/profile/",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "profile",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Profile By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/profile/{{SOME_PROFILE_ID}}/",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "profile",
+                "{{SOME_PROFILE_ID}}",
+                ""
+              ]
+            }
+          },
+          "response": []
         }
-      },
-      "response": []
+      ]
     },
     {
-      "name": "CreateReview",
-      "protocolProfileBehavior": {
-        "disabledSystemHeaders": {
-          "content-type": true
-        }
-      },
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2Nzk3Mjg2LCJpYXQiOjE3NzY3OTM2ODYsImp0aSI6IjQ1MzMwMjQ2YmEzZTQyMzViM2I4ZmU3MWFiNjNkNzhiIiwidXNlcl9pZCI6IjMifQ.BDZ5MX67Wkk1JpSncv9YMDha1nzgdbp5kWuTyCOCPAY",
-              "type": "string"
+      "name": "Reviews",
+      "item": [
+        {
+          "name": "Get All Book Reviews",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/reviews/",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "reviews",
+                ""
+              ]
             }
-          ]
+          },
+          "response": []
         },
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"book_id\": 1,\r\n  \"rating\": 5,\r\n  \"comment\": \"Great book\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "text"
+        {
+          "name": "Add New Review",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"offer_id\": {{SOME_BOOK_INSTANCE_ID}},\r\n    \"rating\": 5,\r\n    \"comment\": \"A great book for testing!\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/reviews/",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "reviews",
+                ""
+              ]
             }
-          }
-        },
-        "url": {
-          "raw": "http://127.0.0.1:8000/api/reviews/",
-          "protocol": "http",
-          "host": [
-            "127",
-            "0",
-            "0",
-            "1"
-          ],
-          "port": "8000",
-          "path": [
-            "api",
-            "reviews",
-            ""
-          ]
+          },
+          "response": []
         }
-      },
-      "response": []
+      ]
     },
     {
-      "name": "GetRequests",
-      "protocolProfileBehavior": {
-        "disableBodyPruning": true
-      },
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2Nzk4NjUzLCJpYXQiOjE3NzY3OTUwNTMsImp0aSI6IjE5N2MwYzFlMTg2NjRjNTBiNzk5MjNiMjY1MGI1YmQ1IiwidXNlcl9pZCI6IjMifQ.-IVe431dV3qGxMLNhDEw8NQqKP4GTvfffuhBH5fSPiw",
-              "type": "string"
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "Get My Statistics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/dashboard/",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "dashboard",
+                ""
+              ]
             }
-          ]
+          },
+          "response": []
         },
-        "method": "GET",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"username\": \"test\",\r\n  \"password\": \"123456\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
+        {
+          "name": "Get Service Statistics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/stats/",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "stats",
+                ""
+              ]
             }
-          }
-        },
-        "url": {
-          "raw": "http://127.0.0.1:8000/api/requests/",
-          "protocol": "http",
-          "host": [
-            "127",
-            "0",
-            "0",
-            "1"
-          ],
-          "port": "8000",
-          "path": [
-            "api",
-            "requests",
-            ""
-          ]
+          },
+          "response": []
         }
-      },
-      "response": []
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{ACCESS_TOKEN}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
     },
     {
-      "name": "GetReviews",
-      "protocolProfileBehavior": {
-        "disableBodyPruning": true
-      },
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2Nzk4NjUzLCJpYXQiOjE3NzY3OTUwNTMsImp0aSI6IjE5N2MwYzFlMTg2NjRjNTBiNzk5MjNiMjY1MGI1YmQ1IiwidXNlcl9pZCI6IjMifQ.-IVe431dV3qGxMLNhDEw8NQqKP4GTvfffuhBH5fSPiw",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "GET",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"status\": \"approved\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "http://127.0.0.1:8000/api/reviews/",
-          "protocol": "http",
-          "host": [
-            "127",
-            "0",
-            "0",
-            "1"
-          ],
-          "port": "8000",
-          "path": [
-            "api",
-            "reviews",
-            ""
-          ]
-        }
-      },
-      "response": []
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": "http://localhost:8000/"
     },
     {
-      "name": "GetProfile",
-      "protocolProfileBehavior": {
-        "disableBodyPruning": true
-      },
-      "request": {
-        "auth": {
-          "type": "bearer",
-          "bearer": [
-            {
-              "key": "token",
-              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc2Nzk4NjUzLCJpYXQiOjE3NzY3OTUwNTMsImp0aSI6IjE5N2MwYzFlMTg2NjRjNTBiNzk5MjNiMjY1MGI1YmQ1IiwidXNlcl9pZCI6IjMifQ.-IVe431dV3qGxMLNhDEw8NQqKP4GTvfffuhBH5fSPiw",
-              "type": "string"
-            }
-          ]
-        },
-        "method": "GET",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n  \"status\": \"approved\"\r\n}"
-        },
-        "url": {
-          "raw": "http://127.0.0.1:8000/api/profile/",
-          "protocol": "http",
-          "host": [
-            "127",
-            "0",
-            "0",
-            "1"
-          ],
-          "port": "8000",
-          "path": [
-            "api",
-            "profile",
-            ""
-          ]
-        }
-      },
-      "response": []
+      "key": "USERNAME",
+      "value": "supertester123"
+    },
+    {
+      "key": "PASSWORD",
+      "value": "password321"
+    },
+    {
+      "key": "NEW_BOOK_TITLE",
+      "value": "How to test"
+    },
+    {
+      "key": "NEW_BOOK_AUTHOR",
+      "value": "Test Tester"
+    },
+    {
+      "key": "NEW_BOOK_DESCRIPTION",
+      "value": "Some test description."
+    },
+    {
+      "key": "NEW_BOOK_YEAR",
+      "value": "2007"
     }
   ]
 }

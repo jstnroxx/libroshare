@@ -46,7 +46,7 @@ class Request(models.Model):
     for_days = models.IntegerField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
-    resolved_at = models.DateTimeField(blank=True)
+    resolved_at = models.DateTimeField(blank=True, null=True)
 
 class UserReview(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_reviews")
