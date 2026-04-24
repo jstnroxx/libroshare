@@ -1,3 +1,4 @@
+```html
 <div class="page-container">
   @if (isLoading) {
     <div class="loading-overlay">
@@ -94,3 +95,49 @@
     </div>
   }
 </div>
+
+
+@if (isModalOpen && selectedInstance) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+
+      @if (!requestSent) {
+        <h2 class="modal-title">Request Book</h2>
+        <p class="modal-book-title">{{ book?.title }}</p>
+
+        <div class="modal-owner-row">
+          <div class="avatar">{{ selectedInstance.ownerName[0] }}</div>
+          <div>
+            <a [routerLink]="['/profile', selectedInstance.ownerId]" class="modal-owner-name">
+              {{ selectedInstance.ownerName }}
+            </a>
+            <div class="modal-owner-rating">⭐ {{ selectedInstance.ownerRating }}</div>
+          </div>
+        </div>
+
+        <div class="modal-meta">
+          <span class="cond">Condition: {{ selectedInstance.condition }}</span>
+          <span class="hist">🔄 Borrowed {{ selectedInstance.total_lends }} times</span>
+        </div>
+
+        @if (requestError) {
+          <p class="modal-error">{{ requestError }}</p>
+        }
+
+        <div class="modal-actions">
+          <button class="btn-cancel" (click)="closeModal()">Cancel</button>
+          <button class="btn-confirm" (click)="confirmRequest()">Send Request</button>
+        </div>
+
+      } @else {
+        <div class="modal-success">
+          <span class="success-icon">✓</span>
+          <h3>Request Sent!</h3>
+          <p>Track it in <a routerLink="/requests">My Requests</a></p>
+          <button class="btn-confirm" (click)="closeModal()">Close</button>
+        </div>
+      }
+
+    </div>
+  </div>
+}

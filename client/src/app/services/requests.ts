@@ -1,22 +1,35 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs'; 
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
+export interface RequestUser {
+    id: number;
+    username: string;
+    rating: number;
+}
+
+export interface RequestsResponse {
+    incoming: any[];
+    outgoing: any[];
+}
+
+@Injectable({
+    providedIn: 'root'
+})
 export class RequestService {
-  private API_URL = 'http://localhost:8000/api/requests'; 
+    private apiUrl = 'http://localhost:8000/api';
 
-  constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) {}
 
-  getMyRequests(): Observable<any> {
-    return this.http.get(this.API_URL);
-  }
+    getMyRequests(): Observable<RequestsResponse> {
+        return this.http.get<RequestsResponse>(`${this.apiUrl}/requests/`);
+    }
 
-  sendRequest(bookId: number): Observable<any> {
-    return this.http.post(this.API_URL, {book: bookId});
-  }
+    sendRequest(offerId: number): Observable<any> {
+        return this.http.post(`${this.apiUrl}/requests/`, { offer: offerId });
+    }
 
-  updateRequest(reqId: number, _status: 'approved' | 'pending' | 'rejected'): Observable<any> {
-    return this.http.patch(`${this.API_URL}/actions/${reqId}`, {status: _status});
-  }
+    updateRequest(id: number, status: 'approved' | 'rejected'): Observable<any> {
+        return this.http.patch(`${this.apiUrl}/requests/action/${id}/`, { status });
+    }
 }

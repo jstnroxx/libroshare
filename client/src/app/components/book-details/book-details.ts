@@ -4,73 +4,94 @@ import { ActivatedRoute, RouterLink, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Book, BookInstance } from '../../models/book.model';
 import { BookService } from '../../services/book';
+import { RequestService } from '../../services/requests';
 
 @Component({
-  selector: 'app-book-details',
-  standalone: true,
-  imports: [CommonModule, RouterLink, RouterModule, FormsModule],
-  templateUrl: './book-details.html',
-  styleUrls: ['./book-details.css']
+    selector: 'app-book-details',
+    standalone: true,
+    imports: [CommonModule, RouterLink, RouterModule, FormsModule],
+    templateUrl: './book-details.html',
+    styleUrls: ['./book-details.css']
 })
 export class BookDetails implements OnInit {
-  book: Book | null = null;
-  isLoading = true;
-  similarBooks: Book[] = []; // Array for similar books
-  
-  selectedInstance: BookInstance | null = null;
-  isModalOpen = false;
+    book: Book | null = null;
+    isLoading = true;
+    similarBooks: Book[] = [];
 
-  constructor(
-    private route: ActivatedRoute,
-    private bookService: BookService,
-    private location: Location,
-    private cdr: ChangeDetectorRef
-  ) {}
+    selectedInstance: BookInstance | null = null;
+    isModalOpen = false;
+    requestSent = false;
+    requestError = '';
 
-  ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      const id = Number(params.get('id'));
-      if (id) {
-        this.loadBookData(id);
-      }
-    });
-  }
+    constructor(
+        private route: ActivatedRoute,
+        private bookService: BookService,
+        private requestService: RequestService,
+        private location: Location,
+        private cdr: ChangeDetectorRef
+    ) {}
 
-  loadBookData(id: number): void {
-    this.isLoading = true;
-    this.similarBooks = []; // Reset list
+    ngOnInit(): void {
+        this.route.paramMap.subscribe(params => {
+            const id = Number(params.get('id'));
+            if (id) this.loadBookData(id);
+        });
+    }
 
-    this.bookService.getBookById(id).subscribe({
-      next: (data) => {
-        this.book = data;
-        this.isLoading = false;
-        
-        // FETCH SIMILAR BOOKS LOGIC
-        if (data.genre) {
-          this.bookService.getSimilarBooks(data.genre).subscribe({
-            next: (list) => {
-              // Filter out the current book so it doesn't recommend itself
-              this.similarBooks = list.filter(b => b.id !== id).slice(0, 4);
-              this.cdr.detectChanges();
+    loadBookData(id: number): void {
+        this.isLoading = true;
+        this.similarBooks = [];
+
+        this.bookService.getBookById(id).subscribe({
+            next: (data) => {
+                this.book = data;
+                this.isLoading = false;
+                if (data.genre) {
+                    this.bookService.getSimilarBooks(data.genre).subscribe({
+                        next: (list) => {
+                            this.similarBooks = list.filter(b => b.id !== id).slice(0, 4);
+                            this.cdr.detectChanges();
+                        }
+                    });
+                }
+                this.cdr.detectChanges();
+            },
+            error: () => {
+                this.isLoading = false;
+                this.cdr.detectChanges();
             }
-          });
-        }
-        this.cdr.detectChanges();
-      },
-      error: (err) => {
-        console.error('Error:', err);
-        this.isLoading = false;
-        this.cdr.detectChanges();
-      }
-    });
-  }
+        });
+    }
 
-  openRequestModal(instance: BookInstance): void {
-    this.selectedInstance = instance;
-    this.isModalOpen = true;
-  }
+    openRequestModal(instance: BookInstance): void {
+        this.selectedInstance = instance;
+        this.isModalOpen = true;
+        this.requestSent = false;
+        this.requestError = '';
+    }
 
-  goBack(): void {
-    this.location.back();
-  }
+    closeModal(): void {
+        this.isModalOpen = false;
+        this.selectedInstance = null;
+        this.requestSent = false;
+        this.requestError = '';
+    }
+
+    confirmRequest(): void {
+        if (!this.selectedInstance) return;
+        this.requestService.sendRequest(this.selectedInstance.id).subscribe({
+            next: () => {
+                this.requestSent = true;
+                this.cdr.detectChanges();
+            },
+            error: (err: any) => {
+                this.requestError = err.error?.detail || 'Failed to send request. Try again.';
+                this.cdr.detectChanges();
+            }
+        });
+    }
+
+    goBack(): void {
+        this.location.back();
+    }
 }
